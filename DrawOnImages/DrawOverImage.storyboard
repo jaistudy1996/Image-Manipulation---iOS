@@ -13,7 +13,7 @@
         <!--Draw Over Image-->
         <scene sceneID="qgO-6u-Yr6">
             <objects>
-                <viewController storyboardIdentifier="DrawOverImage" useStoryboardIdentifierAsRestorationIdentifier="YES" id="aEY-7w-Zdu" customClass="DrawOverImage" customModule="cameraTest" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="DrawOverImage" useStoryboardIdentifierAsRestorationIdentifier="YES" id="aEY-7w-Zdu" customClass="DrawOverImage" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Q2w-zh-pPW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -27,7 +27,7 @@
                                     <navigationItem title="Edit Image" id="NeJ-lM-LOj">
                                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="pqV-G3-Bwr">
                                             <connections>
-                                                <action selector="DoneEditing:" destination="aEY-7w-Zdu" id="9Ze-Ju-vEt"/>
+                                                <action selector="doneEditing:" destination="aEY-7w-Zdu" id="7Yw-Ig-N2n"/>
                                             </connections>
                                         </barButtonItem>
                                     </navigationItem>
@@ -49,8 +49,7 @@
                                     <constraint firstAttribute="width" constant="375" id="JSr-bF-ZJc"/>
                                 </constraints>
                                 <items>
-                                    <tabBarItem systemItem="topRated" id="9P6-wt-Fhb"/>
-                                    <tabBarItem systemItem="more" id="ScZ-xK-SMf"/>
+                                    <tabBarItem title="Change Color" image="color-picker" id="ScZ-xK-SMf"/>
                                 </items>
                             </tabBar>
                         </subviews>
@@ -90,6 +89,7 @@
                     <connections>
                         <outlet property="editsForImage" destination="uAd-rO-YYx" id="3vK-AE-QKW"/>
                         <outlet property="mainImage" destination="rBd-XG-nv3" id="oZx-K4-IQh"/>
+                        <outlet property="tabBarSelectColor" destination="kv6-gF-ttT" id="3Em-jp-wTD"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="PHj-dP-U5T" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -109,4 +109,7 @@
             <point key="canvasLocation" x="320.80000000000001" y="96.7016491754123"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="color-picker" width="32" height="32"/>
+    </resources>
 </document>

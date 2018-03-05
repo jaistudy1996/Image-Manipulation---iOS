@@ -5,6 +5,7 @@
 //  Created by Jayant Arora on 3/1/18.
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
+// swiftlint:disable trailing_whitespace
 
 import Foundation
 import UIKit
@@ -12,34 +13,31 @@ import UIKit
 class TakePicture: UIPageViewController {
     
     private(set) lazy var orderedViewControllers: [UIViewController] = {
-        return [self.newImageCaptureViewController(color: "CaptureImageViewController")]
+        return [self.newImageCaptureViewController(identifier: "CaptureImageViewController")]
     }()
-    
-    private func newImageCaptureViewController(color: String) -> UIViewController {
+    private func newImageCaptureViewController(identifier: String) -> UIViewController {
         return UIStoryboard(name: "TakePictures", bundle: nil) .
             instantiateViewController(withIdentifier: "CaptureImageViewController")
     }
-    
     var pageControl = UIPageControl()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataSource = self
         self.delegate = self
-        
         if let firstViewController = orderedViewControllers.first {
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
         }
         configurePageControl(currentPageNumber: 0, totalNumberofPages: orderedViewControllers.count)
     }
-    
     override func didReceiveMemoryWarning() {
-        print("Memory warning TakePictures")
+        print("Memory warning -- TakePictures")
     }
     
-    private func createViewController() -> UIViewController{
-        let newVC = self.storyboard?.instantiateViewController(withIdentifier: "CaptureImageViewController")
-        return newVC!
+    private func createViewController() -> UIViewController? {
+        guard let newVC = self.storyboard?.instantiateViewController(withIdentifier: "CaptureImageViewController") else {
+            return nil
+        }
+        return newVC
     }
     
     /**
@@ -49,13 +47,17 @@ class TakePicture: UIPageViewController {
      
      Will create a new view controller if total available are upto 5 in memory..
      otherwise will resuse an previously generated view controller
- 
+     
+     - Important: Not yet used in code
     */
-    private func generateNewVConSwipe() -> Int {
-        if (orderedViewControllers.count <= 5) {
+    private func generateNewVConSwipe() -> Int? {
+        if orderedViewControllers.count <= 5 {
             let generatedViewIndex = orderedViewControllers.count
             // Make a new view controller and add it to orderedViewController
-            orderedViewControllers.append(createViewController())
+            guard let newController = createViewController() else {
+                return nil
+            }
+            orderedViewControllers.append(newController)
             return generatedViewIndex
         } else {
             // Reuse one of the previously generated view controllers
@@ -69,12 +71,10 @@ extension TakePicture: UIPageViewControllerDataSource {
         
         guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
         print("Before Index: \(viewControllerIndex)")
-        
         let prevIndex = viewControllerIndex - 1
         guard prevIndex >= 0 else { return orderedViewControllers.last }
         
         guard orderedViewControllers.count > prevIndex else { return nil }
-        
         return orderedViewControllers[prevIndex]
     }
     
@@ -86,7 +86,10 @@ extension TakePicture: UIPageViewControllerDataSource {
         
         let nextIndex = viewControllerIndex + 1
         guard nextIndex != orderedViewControllers.count else {
-            orderedViewControllers.append(createViewController())
+            guard let newController = createViewController() else {
+                return orderedViewControllers.last
+            }
+            orderedViewControllers.append(newController)
             configurePageControl(currentPageNumber: nextIndex, totalNumberofPages: orderedViewControllers.count)
             return orderedViewControllers.last
         }
@@ -115,13 +118,13 @@ extension TakePicture: UIPageViewControllerDataSource {
 extension TakePicture: UIPageViewControllerDelegate {
     func configurePageControl(currentPageNumber: Int, totalNumberofPages: Int) {
         
-        if( self.view.subviews.index(of: pageControl) != nil ) {
+        if self.view.subviews.index(of: pageControl) != nil  {
             // remove and add page control again when a new view needs to be added
             pageControl.removeFromSuperview()
         }
         
         // The total number of pages that are available is based on how many available colors we have.
-        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 70,width: UIScreen.main.bounds.width,height: 10))
+        pageControl = UIPageControl(frame: CGRect(x: 0, y: UIScreen.main.bounds.maxY - 70, width: UIScreen.main.bounds.width, height: 10))
         self.pageControl.numberOfPages = totalNumberofPages // increase number by 1 to hint user that there is something on the next page
         self.pageControl.currentPage = currentPageNumber
         self.pageControl.tintColor = UIColor.black
@@ -136,4 +139,3 @@ extension TakePicture: UIPageViewControllerDelegate {
         self.pageControl.currentPage = orderedViewControllers.index(of: pageContentViewController)!
     }
 }
-

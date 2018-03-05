@@ -5,6 +5,7 @@
 //  Created by Jayant Arora on 3/1/18.
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
+// swiftlint:disable trailing_whitespace
 
 import Foundation
 import UIKit
@@ -20,27 +21,37 @@ class CaptureImageVC: UIViewController {
     
     @IBAction func openCamera(_ sender: UIButton) {
         let imagePickerController = UIImagePickerController()
-        if ( UIImagePickerController.isSourceTypeAvailable(.camera) ){
+        if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePickerController.sourceType = .camera
             imagePickerController.delegate = self
             
             self.present(imagePickerController, animated: true, completion: nil)
         } else {
-            // TODO: Add some sort of warning if the camera is not available
+            showNoCameraAvailableAlert()
             print("Camera not available")
         }
     }
 }
 
 extension CaptureImageVC: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        // TODO: Change force cast of image
-        setPreviewImage(info[UIImagePickerControllerOriginalImage] as! UIImage)
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
+
+        guard let capturedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
+            picker.dismiss(animated: true, completion: nil)
+            return
+        }
+        setPreviewImage(capturedImage)
         picker.dismiss(animated: true, completion: nil)
     }
     
     private func setPreviewImage(_ imageToDisplay: UIImage) {
         previewImage.image = imageToDisplay
+    }
+    
+    private func showNoCameraAvailableAlert() {
+        let alertController = UIAlertController(title: "No Camera Available", message: nil, preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+        self.present(alertController, animated: true, completion: nil)
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
@@ -54,7 +65,7 @@ extension CaptureImageVC: UINavigationControllerDelegate {
 
 extension CaptureImageVC: UITabBarDelegate {
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        if (item.tag == 0) { // Tag 0 is for editing image
+        if item.tag == 0 { // Tag 0 is for editing image
             let drawOverImageVC = DrawOverImage.fromStoryboard()
             drawOverImageVC.delgate = self as DrawOverImageDelegate
             drawOverImageVC.imageForMainImage = previewImage.image
@@ -68,4 +79,3 @@ extension CaptureImageVC: DrawOverImageDelegate {
         previewImage.image = image
     }
 }
-

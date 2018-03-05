@@ -5,6 +5,7 @@
 //  Created by Jayant Arora on 3/2/18.
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
+// swiftlint:disable trailing_whitespace
 
 import Foundation
 import UIKit
@@ -38,4 +39,3 @@ extension StoryboardInitializable where Self: UIViewController {
     }
     
 }
-

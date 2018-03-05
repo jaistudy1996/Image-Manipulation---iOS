@@ -5,6 +5,7 @@
 //  Created by Jayant Arora on 3/1/18.
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
+// swiftlint:disable trailing_whitespace
 
 import UIKit
 
@@ -17,11 +18,12 @@ class DrawOverImage: UIViewController {
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
     
+    @IBOutlet weak var tabBarSelectColor: UITabBar!
     weak var delgate: DrawOverImageDelegate?
     
     @IBOutlet weak var editsForImage: UIImageView!
     
-    @IBAction func DoneEditing(_ sender: UIBarButtonItem) {
+    @IBAction func doneEditing(_ sender: UIBarButtonItem) {
         
         // Merge two images before exiting view controller
         mergeImage()
@@ -34,7 +36,7 @@ class DrawOverImage: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func Brush(_ sender: UIBarButtonItem) {
+    @IBAction func brush(_ sender: UIBarButtonItem) {
         print("Brush Selected")
     }
     
@@ -62,7 +64,9 @@ class DrawOverImage: UIViewController {
     
     // MARK: Setup touch gestures
     @IBAction func tapGesture(_ gesture: UITapGestureRecognizer) {
-        if (gesture.state == .recognized) {
+        if gesture.state == .recognized {
+            // remove selection from tab bar when the user starts to scribble.
+            tabBarSelectColor.selectedItem = nil
             print("Initial Touch Gesture")
         }
     }
@@ -71,12 +75,12 @@ class DrawOverImage: UIViewController {
         
         let currentTouchLoc = gesture.location(in: editsForImage)
         
-        if (gesture.state == .began) {
+        if gesture.state == .began {
             oldTouchPoint = currentTouchLoc
         }
         
-        if (gesture.state != .ended) {
-            if (oldTouchPoint != nil){
+        if gesture.state != .ended {
+            if oldTouchPoint != nil {
                 drawLine(from: oldTouchPoint!, to: currentTouchLoc)
             }
         }
@@ -141,6 +145,4 @@ extension DrawOverImage: StoryboardInitializable {
     static var storyboardSceneID: String {
         return "DrawOverImage"
     }
-    
-    
 }

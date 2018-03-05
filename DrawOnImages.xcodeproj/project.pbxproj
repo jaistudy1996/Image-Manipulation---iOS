@@ -8,20 +8,28 @@
 
 /* Begin PBXBuildFile section */
 		3B7B8D87204D7A550053740B /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8D86204D7A550053740B /* AppDelegate.swift */; };
-		3B7B8D89204D7A550053740B /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8D88204D7A550053740B /* ViewController.swift */; };
-		3B7B8D8C204D7A550053740B /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8D8A204D7A550053740B /* Main.storyboard */; };
 		3B7B8D8E204D7A550053740B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8D8D204D7A550053740B /* Assets.xcassets */; };
 		3B7B8D91204D7A550053740B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8D8F204D7A550053740B /* LaunchScreen.storyboard */; };
+		3B7B8DA6204D8CA10053740B /* TakePictures.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA3204D8CA10053740B /* TakePictures.storyboard */; };
+		3B7B8DA7204D8CA10053740B /* CaptureImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA4204D8CA10053740B /* CaptureImageVC.swift */; };
+		3B7B8DA8204D8CA10053740B /* TakePictures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA5204D8CA10053740B /* TakePictures.swift */; };
+		3B7B8DAC204D9C290053740B /* StoryboardInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA9204D9C280053740B /* StoryboardInitializable.swift */; };
+		3B7B8DAD204D9C290053740B /* DrawOverImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DAA204D9C280053740B /* DrawOverImage.swift */; };
+		3B7B8DAE204D9C290053740B /* DrawOverImage.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8DAB204D9C290053740B /* DrawOverImage.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		3B7B8D83204D7A550053740B /* DrawOnImages.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = DrawOnImages.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3B7B8D86204D7A550053740B /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		3B7B8D88204D7A550053740B /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		3B7B8D8B204D7A550053740B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		3B7B8D8D204D7A550053740B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		3B7B8D90204D7A550053740B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3B7B8D92204D7A550053740B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3B7B8DA3204D8CA10053740B /* TakePictures.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TakePictures.storyboard; sourceTree = "<group>"; };
+		3B7B8DA4204D8CA10053740B /* CaptureImageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureImageVC.swift; sourceTree = "<group>"; };
+		3B7B8DA5204D8CA10053740B /* TakePictures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePictures.swift; sourceTree = "<group>"; };
+		3B7B8DA9204D9C280053740B /* StoryboardInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardInitializable.swift; sourceTree = "<group>"; };
+		3B7B8DAA204D9C280053740B /* DrawOverImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawOverImage.swift; sourceTree = "<group>"; };
+		3B7B8DAB204D9C290053740B /* DrawOverImage.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = DrawOverImage.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -54,14 +62,26 @@
 		3B7B8D85204D7A550053740B /* DrawOnImages */ = {
 			isa = PBXGroup;
 			children = (
+				3B7B8D98204D7A760053740B /* CameraUI */,
+				3B7B8DAB204D9C290053740B /* DrawOverImage.storyboard */,
+				3B7B8DAA204D9C280053740B /* DrawOverImage.swift */,
+				3B7B8DA9204D9C280053740B /* StoryboardInitializable.swift */,
 				3B7B8D86204D7A550053740B /* AppDelegate.swift */,
-				3B7B8D88204D7A550053740B /* ViewController.swift */,
-				3B7B8D8A204D7A550053740B /* Main.storyboard */,
 				3B7B8D8D204D7A550053740B /* Assets.xcassets */,
 				3B7B8D8F204D7A550053740B /* LaunchScreen.storyboard */,
 				3B7B8D92204D7A550053740B /* Info.plist */,
 			);
 			path = DrawOnImages;
+			sourceTree = "<group>";
+		};
+		3B7B8D98204D7A760053740B /* CameraUI */ = {
+			isa = PBXGroup;
+			children = (
+				3B7B8DA4204D8CA10053740B /* CaptureImageVC.swift */,
+				3B7B8DA3204D8CA10053740B /* TakePictures.storyboard */,
+				3B7B8DA5204D8CA10053740B /* TakePictures.swift */,
+			);
+			path = CameraUI;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -123,9 +143,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3B7B8DAE204D9C290053740B /* DrawOverImage.storyboard in Resources */,
 				3B7B8D91204D7A550053740B /* LaunchScreen.storyboard in Resources */,
+				3B7B8DA6204D8CA10053740B /* TakePictures.storyboard in Resources */,
 				3B7B8D8E204D7A550053740B /* Assets.xcassets in Resources */,
-				3B7B8D8C204D7A550053740B /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -136,22 +157,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3B7B8D89204D7A550053740B /* ViewController.swift in Sources */,
 				3B7B8D87204D7A550053740B /* AppDelegate.swift in Sources */,
+				3B7B8DA7204D8CA10053740B /* CaptureImageVC.swift in Sources */,
+				3B7B8DAC204D9C290053740B /* StoryboardInitializable.swift in Sources */,
+				3B7B8DAD204D9C290053740B /* DrawOverImage.swift in Sources */,
+				3B7B8DA8204D8CA10053740B /* TakePictures.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		3B7B8D8A204D7A550053740B /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				3B7B8D8B204D7A550053740B /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		3B7B8D8F204D7A550053740B /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -277,6 +293,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 299A72ZY42;
 				INFOPLIST_FILE = DrawOnImages/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vtinfo.jayant.arora.DrawOnImages;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -292,6 +309,7 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 299A72ZY42;
 				INFOPLIST_FILE = DrawOnImages/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.vtinfo.jayant.arora.DrawOnImages;
 				PRODUCT_NAME = "$(TARGET_NAME)";

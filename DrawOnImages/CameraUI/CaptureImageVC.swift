@@ -71,6 +71,13 @@ extension CaptureImageVC: UITabBarDelegate {
             drawOverImageVC.imageForMainImage = previewImage.image
             self.present(drawOverImageVC, animated: true, completion: nil)
         }
+        if item.tag == 1 { // trigger for save image
+            if previewImage.image != nil {
+                UIImageWriteToSavedPhotosAlbum(previewImage.image!, nil, nil, nil)
+            } else {
+                return
+            }
+        }
     }
 }
 

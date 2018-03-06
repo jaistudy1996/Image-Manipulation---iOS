@@ -60,6 +60,7 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <items>
                                     <tabBarItem title="Edit" image="edit" id="N3w-Ey-0IZ"/>
+                                    <tabBarItem tag="1" title="Save Image" image="save" id="imb-ZN-ze3"/>
                                 </items>
                             </tabBar>
                         </subviews>
@@ -97,5 +98,6 @@
     </scenes>
     <resources>
         <image name="edit" width="32" height="32"/>
+        <image name="save" width="32" height="32"/>
     </resources>
 </document>

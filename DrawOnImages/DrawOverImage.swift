@@ -8,6 +8,7 @@
 // swiftlint:disable trailing_whitespace
 
 import UIKit
+import ColorSlider
 
 protocol DrawOverImageDelegate: class {
     func doneEditing(image: UIImage)
@@ -17,6 +18,7 @@ class DrawOverImage: UIViewController {
     
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
+    lazy var strokeColor: UIColor = UIColor.black
     
     @IBOutlet weak var tabBarSelectColor: UITabBar!
     weak var delgate: DrawOverImageDelegate?
@@ -47,6 +49,7 @@ class DrawOverImage: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpImage()
+        self.tabBarSelectColor.delegate = self
     }
 
     override func didReceiveMemoryWarning() {
@@ -105,10 +108,8 @@ class DrawOverImage: UIViewController {
         let context = UIGraphicsGetCurrentContext()
         editsForImage.image?.draw(at: CGPoint(x: 0, y: 0))
 
-        let strokeColor = UIColor.black.cgColor
-
         context?.setLineWidth(2)
-        context?.setStrokeColor(strokeColor)
+        context?.setStrokeColor(strokeColor.cgColor)
         context?.setLineCap(.round)
 
         context?.move(to: from)
@@ -120,7 +121,7 @@ class DrawOverImage: UIViewController {
         UIGraphicsEndImageContext()
 
     }
-    
+
     /**
      Merge two images together (bacground and foreground)
     */
@@ -144,5 +145,37 @@ extension DrawOverImage: StoryboardInitializable {
     
     static var storyboardSceneID: String {
         return "DrawOverImage"
+    }
+}
+
+extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelegate {
+    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+        print("Change color selected")
+        // the device is an iPad
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChangeColor") else {
+                return
+            }
+            vc.modalPresentationStyle = .popover
+            vc.preferredContentSize = CGSize(width: 220, height: 90)
+            let popoverVC = vc.popoverPresentationController
+            popoverVC?.permittedArrowDirections = .down
+            popoverVC?.delegate = self
+            popoverVC?.sourceView = tabBarSelectColor
+            let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
+            colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
+            colorSlider.frame = CGRect(x: 10, y: 70, width: 200, height: 20)
+            vc.view.addSubview(colorSlider)
+            present(vc, animated: true, completion: nil)
+        }
+    }
+    
+    @objc func changeDrawLineColor(_ colorSlider: ColorSlider) {
+        print(colorSlider.color)
+        strokeColor = colorSlider.color
+    }
+    
+    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
+        return .none
     }
 }

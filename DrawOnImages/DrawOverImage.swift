@@ -19,6 +19,7 @@ class DrawOverImage: UIViewController {
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
     lazy var strokeColor: UIColor = UIColor.black
+    lazy var iPhoneColorSliderView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     
     @IBOutlet weak var tabBarSelectColor: UITabBar!
     weak var delgate: DrawOverImageDelegate?
@@ -70,12 +71,17 @@ class DrawOverImage: UIViewController {
         if gesture.state == .recognized {
             // remove selection from tab bar when the user starts to scribble.
             tabBarSelectColor.selectedItem = nil
+            if UIDevice.current.userInterfaceIdiom == .phone {
+                iPhoneColorSliderView.removeFromSuperview() // remove color selector when user taps on the screen
+            }
             print("Initial Touch Gesture")
         }
     }
     
     @IBAction func panGesture(_ gesture: UIPanGestureRecognizer) {
-        
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            iPhoneColorSliderView.removeFromSuperview() // remove color selector when user starts swiping on the screen
+        }
         let currentTouchLoc = gesture.location(in: editsForImage)
         
         if gesture.state == .began {
@@ -148,6 +154,7 @@ extension DrawOverImage: StoryboardInitializable {
     }
 }
 
+// swiftlint:disable line_length
 extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelegate {
     func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         print("Change color selected")
@@ -167,6 +174,24 @@ extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelega
             colorSlider.frame = CGRect(x: 10, y: 70, width: 200, height: 20)
             vc.view.addSubview(colorSlider)
             present(vc, animated: true, completion: nil)
+        }
+        
+        // if the device is an iPhone
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            // remove color slider view just in case it is already on the screeen
+            iPhoneColorSliderView.removeFromSuperview()
+            
+            let tabBarFrame = tabBarSelectColor.frame
+            let frame = CGRect(x: 10, y: tabBarFrame.origin.y - tabBarFrame.height, width: tabBarFrame.width - 40, height: tabBarFrame.height)
+            iPhoneColorSliderView = UIView(frame: frame)
+            
+            // add colorSlider
+            let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
+            colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
+            colorSlider.frame = CGRect(x: 10, y: 0, width: iPhoneColorSliderView.frame.width, height: 20)
+            iPhoneColorSliderView.tag = 3 // Tag 3 is for the colorslider view.
+            iPhoneColorSliderView.addSubview(colorSlider)
+            self.view.addSubview(iPhoneColorSliderView)
         }
     }
     

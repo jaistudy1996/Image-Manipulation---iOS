@@ -196,7 +196,6 @@ extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelega
     }
     
     @objc func changeDrawLineColor(_ colorSlider: ColorSlider) {
-        print(colorSlider.color)
         strokeColor = colorSlider.color
     }
     

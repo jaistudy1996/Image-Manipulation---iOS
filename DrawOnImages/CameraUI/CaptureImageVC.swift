@@ -19,6 +19,8 @@ class CaptureImageVC: UIViewController {
         tabBar.delegate = self
     }
     
+    @IBOutlet weak var takeImage: UIButton!
+    
     @IBAction func openCamera(_ sender: UIButton) {
         let imagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -41,11 +43,25 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             return
         }
         setPreviewImage(capturedImage)
+        tabBar.selectedItem = nil // after taking the picture set selected item as nil
         picker.dismiss(animated: true, completion: nil)
     }
     
     private func setPreviewImage(_ imageToDisplay: UIImage) {
         previewImage.image = imageToDisplay
+        if takeImage != nil {
+            takeImage.removeFromSuperview() // remove the take image button after setting the preview image
+        }
+        addRetakeImageButtonToTabBar()
+    }
+    
+    private func addRetakeImageButtonToTabBar() {
+        if (tabBar.items?.count)! < 3 {
+            let retakeImage = UITabBarItem(title: "Retake", image: #imageLiteral(resourceName: "retakeImage"), tag: 2)
+            tabBar.items?.append(retakeImage)
+        } else {
+            return
+        }
     }
     
     private func showNoCameraAvailableAlert() {
@@ -55,6 +71,7 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+        tabBar.selectedItem = nil // if the user clicks cancel remove the currently selected button
         picker.dismiss(animated: true, completion: nil)
     }
 }
@@ -77,6 +94,9 @@ extension CaptureImageVC: UITabBarDelegate {
             } else {
                 return
             }
+        }
+        if item.tag == 2 { // retake image
+            openCamera(UIButton(type: .system)) // just a temp button to send to openCamera function
         }
     }
 }

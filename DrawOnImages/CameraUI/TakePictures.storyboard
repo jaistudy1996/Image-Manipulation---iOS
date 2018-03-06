@@ -81,6 +81,7 @@
                     <connections>
                         <outlet property="previewImage" destination="MWi-k3-h9a" id="nge-um-frK"/>
                         <outlet property="tabBar" destination="96R-R2-3Zp" id="LES-iR-npQ"/>
+                        <outlet property="takeImage" destination="zcZ-yR-Ls6" id="7yE-0z-sFY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="YrT-IO-CLX" userLabel="First Responder" sceneMemberID="firstResponder"/>

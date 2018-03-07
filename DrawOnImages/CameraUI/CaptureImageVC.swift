@@ -90,13 +90,26 @@ extension CaptureImageVC: UITabBarDelegate {
         }
         if item.tag == 1 { // trigger for save image
             if previewImage.image != nil {
-                UIImageWriteToSavedPhotosAlbum(previewImage.image!, nil, nil, nil)
+                UIImageWriteToSavedPhotosAlbum(previewImage.image!, self, #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
             } else {
                 return
             }
         }
         if item.tag == 2 { // retake image
             openCamera(UIButton(type: .system)) // just a temp button to send to openCamera function
+        }
+    }
+    
+    @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+        if let error = error {
+            let alertVC = UIAlertController(title: "Error saving image", message: nil, preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alertVC, animated: true, completion: nil)
+        } else {
+            let alertVC = UIAlertController(title: "Image Saved", message: nil, preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            present(alertVC, animated: true, completion: nil)
+            tabBar.selectedItem = nil
         }
     }
 }

@@ -48,9 +48,9 @@
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MWi-k3-h9a">
                                 <rect key="frame" x="16" y="20" width="343" height="598"/>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcZ-yR-Ls6">
-                                <rect key="frame" x="148" y="318" width="78" height="30"/>
-                                <state key="normal" title="Take Image"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcZ-yR-Ls6">
+                                <rect key="frame" x="123" y="269" width="128" height="128"/>
+                                <state key="normal" image="image-add-button"/>
                                 <connections>
                                     <action selector="openCamera:" destination="v0O-vs-Z93" eventType="touchUpInside" id="qYI-f7-QGd"/>
                                 </connections>
@@ -99,6 +99,7 @@
     </scenes>
     <resources>
         <image name="edit" width="32" height="32"/>
+        <image name="image-add-button" width="128" height="128"/>
         <image name="save" width="32" height="32"/>
     </resources>
 </document>

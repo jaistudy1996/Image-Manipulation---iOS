@@ -32,7 +32,7 @@ extension TextFieldInfo: Hashable {
 class DrawOverImage: UIViewController {
 
     // setting up scroll view
-    @IBOutlet var mainScrollView: UIScrollView!
+//    @IBOutlet var mainScrollView: UIScrollView!
 
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
@@ -73,8 +73,8 @@ class DrawOverImage: UIViewController {
         self.tabBarSelectColor.delegate = self
 
         // set up zoom for scroll view
-        //mainScrollView.maximumZoomScale = 5.0
-        //mainScrollView.minimumZoomScale = 1.0
+//        mainScrollView.maximumZoomScale = 5.0
+//        mainScrollView.minimumZoomScale = 0.0
     }
 
     override func didReceiveMemoryWarning() {

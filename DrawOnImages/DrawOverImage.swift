@@ -14,6 +14,21 @@ protocol DrawOverImageDelegate: class {
     func doneEditing(image: UIImage)
 }
 
+struct TextFieldInfo {
+    var frame: CGRect
+    var text: String
+}
+
+extension TextFieldInfo: Hashable {
+    var hashValue: Int {
+        return frame.origin.x.hashValue ^ frame.origin.y.hashValue //&* 16777619
+    }
+
+    static func ==(lhs: TextFieldInfo, rhs: TextFieldInfo) -> Bool {
+        return lhs.frame == rhs.frame// && lhs.text == rhs.text
+    }
+}
+
 class DrawOverImage: UIViewController {
     
     // set this variable when instantiating this vc from some other vc
@@ -44,6 +59,8 @@ class DrawOverImage: UIViewController {
     }
     
     @IBOutlet weak var mainImage: UIImageView!
+
+    private var textFieldsInfo = [TextFieldInfo]()
     
     var oldTouchPoint: CGPoint? // the last time when the screen was touch
     
@@ -74,7 +91,8 @@ class DrawOverImage: UIViewController {
             if UIDevice.current.userInterfaceIdiom == .phone {
                 iPhoneColorSliderView.removeFromSuperview() // remove color selector when user taps on the screen
             }
-            print("Initial Touch Gesture")
+            print("Initial Touch Gesture at: \(gesture.location(in: editsForImage))")
+            addSmallView(loc: gesture.location(in: editsForImage))
         }
     }
     
@@ -132,6 +150,7 @@ class DrawOverImage: UIViewController {
      Merge two images together (bacground and foreground)
     */
     private func mergeImage() {
+//        mergeTextFields()
         let renderer = UIGraphicsImageRenderer(size: mainImage.frame.size)
         
         let img = renderer.image { ctx in
@@ -139,8 +158,40 @@ class DrawOverImage: UIViewController {
             ctx.cgContext.addRect(rectangle)
             mainImage.image?.draw(in: rectangle)
             editsForImage.image?.draw(in: rectangle)
+            for case let view as UITextField in editsForImage.subviews {
+                let text = view.text!
+                text.draw(with: rectangle, options: .usesLineFragmentOrigin, attributes: nil, context: nil)
+            }
+
+//            let paragraphStyle = NSMutableParagraphStyle()
+//            paragraphStyle.alignment = .center
+//
+//            let attrs = [NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Thin", size: 36)!, NSAttributedStringKey.paragraphStyle: paragraphStyle]
+
+//            let string = "How much wood would a woodchuck\nchuck if a woodchuck would chuck wood?"
+//            string.draw(with: CGRect(x: 32, y: 32, width: 448, height: 448), options: .usesLineFragmentOrigin, attributes: nil, context: nil) // .usesLineFragmentOrigin, attributes: attrs, context: nil)
         }
         mainImage.image = img
+    }
+
+    private func addSmallView(loc: CGPoint) {
+        let x = loc.x - 20
+        let y = loc.y - 20
+        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 100, height: 100)))
+        textfield.delegate = self
+        editsForImage.addSubview(textfield)
+    }
+
+    private func mergeTextFields() {
+        let renderer = UIGraphicsImageRenderer(size: editsForImage.frame.size)
+
+        let img = renderer.image { ctx in
+            let rectangle = CGRect(x: 0, y: 0, width: mainImage.frame.width, height: mainImage.frame.height)
+            for view in editsForImage.subviews {
+                view.draw(rectangle)
+            }
+        }
+        editsForImage.image = img
     }
 }
 
@@ -201,5 +252,32 @@ extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelega
     
     func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
         return .none
+    }
+}
+
+extension DrawOverImage: UITextFieldDelegate {
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        self.view.endEditing(true)
+        return true
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+        let tempField = TextFieldInfo(frame: textField.frame, text: textField.text!)
+        if let index = textFieldsInfo.index(of: tempField) {
+            print("Index at: \(index)")
+            if let newText = textField.text{
+                if newText == "" {
+                    textField.removeFromSuperview() // remove textfield if it has an empty string
+                    textFieldsInfo.remove(at: index)
+                } else {
+                    textFieldsInfo[index].text = newText
+                }
+            } else {
+                textField.removeFromSuperview() // remove the textfield if it is empty
+                textFieldsInfo.remove(at: index)
+            }
+        } else {
+            textFieldsInfo.append(tempField)
+        }
     }
 }

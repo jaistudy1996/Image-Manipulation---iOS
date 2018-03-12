@@ -18,11 +18,11 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rBd-XG-nv3">
-                                <rect key="frame" x="0.0" y="157" width="375" height="372"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="rBd-XG-nv3">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                             </imageView>
                             <navigationBar contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dDf-UP-uVq">
-                                <rect key="frame" x="0.0" y="31" width="375" height="44"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="44"/>
                                 <items>
                                     <navigationItem title="Edit Image" id="NeJ-lM-LOj">
                                         <barButtonItem key="rightBarButtonItem" systemItem="done" id="pqV-G3-Bwr">
@@ -38,14 +38,13 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="49" id="0fy-tw-aR5"/>
-                                    <constraint firstAttribute="width" constant="375" id="JSr-bF-ZJc"/>
                                 </constraints>
                                 <items>
                                     <tabBarItem title="Change Color" image="color-picker" id="ScZ-xK-SMf"/>
                                 </items>
                             </tabBar>
-                            <imageView contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uAd-rO-YYx">
-                                <rect key="frame" x="0.0" y="157" width="375" height="372"/>
+                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="uAd-rO-YYx">
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <gestureRecognizers/>
                                 <connections>
                                     <outletCollection property="gestureRecognizers" destination="T6Q-tI-GUP" appends="YES" id="T0v-jw-TRv"/>
@@ -55,28 +54,20 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="uAd-rO-YYx" firstAttribute="top" secondItem="dDf-UP-uVq" secondAttribute="bottom" constant="82" id="2ET-GO-dTT"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="top" secondItem="rBd-XG-nv3" secondAttribute="bottom" constant="89" id="2aP-rD-KTq"/>
                             <constraint firstItem="kv6-gF-ttT" firstAttribute="trailing" secondItem="64V-pF-Pvc" secondAttribute="trailing" id="4zo-2G-zUm"/>
-                            <constraint firstItem="rBd-XG-nv3" firstAttribute="centerX" secondItem="dDf-UP-uVq" secondAttribute="centerX" id="5RS-UJ-QqI"/>
                             <constraint firstItem="kv6-gF-ttT" firstAttribute="bottom" secondItem="64V-pF-Pvc" secondAttribute="bottom" id="6R5-46-Tto"/>
                             <constraint firstItem="uAd-rO-YYx" firstAttribute="leading" secondItem="64V-pF-Pvc" secondAttribute="leading" id="7Xl-42-blL"/>
-                            <constraint firstItem="uAd-rO-YYx" firstAttribute="bottom" secondItem="rBd-XG-nv3" secondAttribute="bottom" id="83x-6h-7b8"/>
                             <constraint firstItem="dDf-UP-uVq" firstAttribute="leading" secondItem="64V-pF-Pvc" secondAttribute="leading" id="A3j-QU-kib"/>
                             <constraint firstItem="64V-pF-Pvc" firstAttribute="trailing" secondItem="uAd-rO-YYx" secondAttribute="trailing" id="LG3-MB-gcJ"/>
-                            <constraint firstItem="uAd-rO-YYx" firstAttribute="top" secondItem="rBd-XG-nv3" secondAttribute="top" id="LOT-67-bg4"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="top" secondItem="uAd-rO-YYx" secondAttribute="bottom" constant="89" id="MfV-aH-ZvE"/>
-                            <constraint firstItem="rBd-XG-nv3" firstAttribute="top" secondItem="dDf-UP-uVq" secondAttribute="bottom" constant="82" id="O4s-Ny-NpN"/>
                             <constraint firstItem="rBd-XG-nv3" firstAttribute="leading" secondItem="64V-pF-Pvc" secondAttribute="leading" id="Omx-pB-kXI"/>
-                            <constraint firstItem="dDf-UP-uVq" firstAttribute="top" secondItem="Q2w-zh-pPW" secondAttribute="top" constant="31" id="RxP-T9-XZT"/>
+                            <constraint firstItem="dDf-UP-uVq" firstAttribute="top" secondItem="Q2w-zh-pPW" secondAttribute="top" constant="20" id="RxP-T9-XZT"/>
+                            <constraint firstItem="uAd-rO-YYx" firstAttribute="top" secondItem="dDf-UP-uVq" secondAttribute="bottom" id="V4E-a8-qox"/>
                             <constraint firstItem="dDf-UP-uVq" firstAttribute="trailing" secondItem="64V-pF-Pvc" secondAttribute="trailing" id="Y6h-mR-YcP"/>
                             <constraint firstItem="64V-pF-Pvc" firstAttribute="trailing" secondItem="rBd-XG-nv3" secondAttribute="trailing" id="Ydo-gV-6Aq"/>
                             <constraint firstItem="kv6-gF-ttT" firstAttribute="leading" secondItem="64V-pF-Pvc" secondAttribute="leading" id="Zls-rj-AbR"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="trailing" secondItem="dDf-UP-uVq" secondAttribute="trailing" id="lJ5-BR-JfP"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="trailing" secondItem="64V-pF-Pvc" secondAttribute="trailing" id="lPw-K9-aWf"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="bottom" secondItem="64V-pF-Pvc" secondAttribute="bottom" id="me0-ao-34y"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="leading" secondItem="64V-pF-Pvc" secondAttribute="leading" id="oB1-Mi-aWs"/>
-                            <constraint firstItem="kv6-gF-ttT" firstAttribute="leading" secondItem="dDf-UP-uVq" secondAttribute="leading" id="tdB-cG-6Hc"/>
+                            <constraint firstItem="rBd-XG-nv3" firstAttribute="top" secondItem="dDf-UP-uVq" secondAttribute="bottom" id="exF-g2-NF7"/>
+                            <constraint firstItem="kv6-gF-ttT" firstAttribute="top" secondItem="rBd-XG-nv3" secondAttribute="bottom" id="qQr-Cy-0vb"/>
+                            <constraint firstItem="kv6-gF-ttT" firstAttribute="top" secondItem="uAd-rO-YYx" secondAttribute="bottom" id="uTn-2A-ozX"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="64V-pF-Pvc"/>
                     </view>

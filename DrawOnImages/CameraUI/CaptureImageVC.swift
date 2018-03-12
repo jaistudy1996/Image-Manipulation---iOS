@@ -20,6 +20,8 @@ class CaptureImageVC: UIViewController {
     }
     
     @IBOutlet weak var takeImage: UIButton!
+
+    private var textEdits = [TextFieldInfo]()   // store all the edits made by the user
     
     @IBAction func openCamera(_ sender: UIButton) {
         let imagePickerController = UIImagePickerController()
@@ -52,6 +54,11 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
         if takeImage != nil {
             takeImage.removeFromSuperview() // remove the take image button after setting the preview image
         }
+
+        for sub in previewImage.subviews {
+            sub.removeFromSuperview()
+        }
+
         addRetakeImageButtonToTabBar()
     }
     
@@ -86,6 +93,7 @@ extension CaptureImageVC: UITabBarDelegate {
             let drawOverImageVC = DrawOverImage.fromStoryboard()
             drawOverImageVC.delgate = self as DrawOverImageDelegate
             drawOverImageVC.imageForMainImage = previewImage.image
+            drawOverImageVC.textFieldsInfo = textEdits
             self.present(drawOverImageVC, animated: true, completion: nil)
         }
         if item.tag == 1 { // trigger for save image
@@ -101,7 +109,7 @@ extension CaptureImageVC: UITabBarDelegate {
     }
     
     @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
-        if let error = error {
+        if error != nil {
             let alertVC = UIAlertController(title: "Error saving image", message: nil, preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
             present(alertVC, animated: true, completion: nil)
@@ -115,7 +123,18 @@ extension CaptureImageVC: UITabBarDelegate {
 }
 
 extension CaptureImageVC: DrawOverImageDelegate {
-    func doneEditing(image: UIImage) {
+    func doneEditing(image: UIImage, textEdits: [TextFieldInfo]) {
         previewImage.image = image
+        addTextFieldsToImage(textEdits: textEdits)
     }
+
+    private func addTextFieldsToImage(textEdits: [TextFieldInfo]) {
+        self.textEdits = textEdits
+        for textEdit in textEdits {
+            let textfield = UITextField(frame: textEdit.frame)
+            textfield.text = textEdit.text
+            previewImage.addSubview(textfield)
+        }
+    }
+
 }

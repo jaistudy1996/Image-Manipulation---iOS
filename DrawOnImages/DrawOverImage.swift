@@ -11,7 +11,7 @@ import UIKit
 import ColorSlider
 
 protocol DrawOverImageDelegate: class {
-    func doneEditing(image: UIImage)
+    func doneEditing(image: UIImage, textEdits: [TextFieldInfo])
 }
 
 struct TextFieldInfo {
@@ -50,7 +50,7 @@ class DrawOverImage: UIViewController {
             dismiss(animated: true, completion: nil)
             return
         }
-        delgate?.doneEditing(image: imageForDelegate)
+        delgate?.doneEditing(image: imageForDelegate, textEdits: textFieldsInfo)
         dismiss(animated: true, completion: nil)
     }
     
@@ -60,7 +60,7 @@ class DrawOverImage: UIViewController {
     
     @IBOutlet weak var mainImage: UIImageView!
 
-    private var textFieldsInfo = [TextFieldInfo]()
+    var textFieldsInfo = [TextFieldInfo]()
     
     var oldTouchPoint: CGPoint? // the last time when the screen was touch
     
@@ -78,9 +78,16 @@ class DrawOverImage: UIViewController {
     // MARK: Setup Initial image
     /**
      Set up background image to be merged when the edits are complete
+     Also add text sub views if they exist
     */
     private func setUpImage() {
         mainImage.image = imageForMainImage
+        imageForMainImage = nil // dealloc imageformainimage
+        for textEdit in textFieldsInfo {
+            let textfield = UITextField(frame: textEdit.frame)
+            textfield.text = textEdit.text
+            editsForImage.addSubview(textfield)
+        }
     }
     
     // MARK: Setup touch gestures
@@ -158,10 +165,10 @@ class DrawOverImage: UIViewController {
             ctx.cgContext.addRect(rectangle)
             mainImage.image?.draw(in: rectangle)
             editsForImage.image?.draw(in: rectangle)
-            for case let view as UITextField in editsForImage.subviews {
-                let text = view.text!
-                text.draw(with: rectangle, options: .usesLineFragmentOrigin, attributes: nil, context: nil)
-            }
+//            for case let view as UITextField in editsForImage.subviews {
+//                let text = view.text!
+//                text.draw(with: rectangle, options: .usesLineFragmentOrigin, attributes: nil, context: nil)
+//            }
 
 //            let paragraphStyle = NSMutableParagraphStyle()
 //            paragraphStyle.alignment = .center

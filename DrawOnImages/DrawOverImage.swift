@@ -175,7 +175,9 @@ class DrawOverImage: UIViewController {
     */
     private func mergeImage() {
 //        mergeTextFields()
-        let renderer = UIGraphicsImageRenderer(size: mainImage.frame.size)
+        let format = UIGraphicsImageRendererFormat()
+        format.scale = mainImage.contentScaleFactor // to keep the scale factor
+        let renderer = UIGraphicsImageRenderer(size: mainImage.frame.size, format: format)
         
         let img = renderer.image { ctx in
             let rectangle = CGRect(x: 0, y: 0, width: mainImage.frame.width, height: mainImage.frame.height)
@@ -270,7 +272,7 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 
 //            let tabBarFrame = tabBarSelectColor.frame
             let toolbarFrame = toolBar.frame
-            let frame = CGRect(x: 10, y: toolbarFrame.origin.y + toolbarFrame.height, width: toolbarFrame.width - 40, height: toolbarFrame.height)
+            let frame = CGRect(x: 10, y: toolbarFrame.origin.y - toolbarFrame.height - 20, width: toolbarFrame.width - 40, height: toolbarFrame.height)
             iPhoneColorSliderView = UIView(frame: frame)
 
             // add colorSlider

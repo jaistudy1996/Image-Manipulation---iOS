@@ -270,7 +270,7 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 
 //            let tabBarFrame = tabBarSelectColor.frame
             let toolbarFrame = toolBar.frame
-            let frame = CGRect(x: 10, y: toolbarFrame.origin.y - toolbarFrame.height, width: toolbarFrame.width - 40, height: toolbarFrame.height)
+            let frame = CGRect(x: 10, y: toolbarFrame.origin.y + toolbarFrame.height, width: toolbarFrame.width - 40, height: toolbarFrame.height)
             iPhoneColorSliderView = UIView(frame: frame)
 
             // add colorSlider

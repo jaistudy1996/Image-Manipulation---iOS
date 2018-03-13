@@ -24,7 +24,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VPz-bM-NQI">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                                         <subviews>
-                                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hIi-fl-dhT" userLabel="mainImage">
+                                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hIi-fl-dhT" userLabel="mainImage">
                                                 <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
                                                 <gestureRecognizers/>
                                             </imageView>
@@ -109,6 +109,21 @@
                 </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="585" y="97"/>
+        </scene>
+        <!--Change Color-->
+        <scene sceneID="t40-Q5-MxR">
+            <objects>
+                <viewController storyboardIdentifier="ChangeColor" title="Change Color" useStoryboardIdentifierAsRestorationIdentifier="YES" id="yhw-dQ-7ON" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Qoo-Za-MOo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <viewLayoutGuide key="safeArea" id="C8p-7Q-9C2"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ypG-ub-9dy" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1519" y="94"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="J1Y-Wn-VPR">

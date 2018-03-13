@@ -69,6 +69,7 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
     
     private func setPreviewImage(_ imageToDisplay: UIImage) {
         previewImage.image = imageToDisplay
+        previewImage.contentMode = .scaleAspectFill
         if takeImage != nil {
             takeImage.removeFromSuperview() // remove the take image button after setting the preview image
         }

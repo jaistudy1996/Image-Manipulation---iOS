@@ -77,17 +77,24 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             sub.removeFromSuperview()
         }
 
-//        addRetakeImageButtonToTabBar()
+        addRetakeImageButtonToTabBar()
     }
     
-//    private func addRetakeImageButtonToTabBar() {
-//        if (tabBar.items?.count)! < 3 {
-//            let retakeImage = UITabBarItem(title: "Retake", image: #imageLiteral(resourceName: "retakeImage"), tag: 2)
-//            tabBar.items?.append(retakeImage)
+    private func addRetakeImageButtonToTabBar() {
+
+//        if ((self.toolbarItems?.count)! < 3) {
+//            let retakeImage = UIBarButtonItem(image: #imageLiteral(resourceName: "retakeImage"), style: .plain, target: self, action: #selector(reopenCamera))
+//            self.toolbarItems?.append(retakeImage)
 //        } else {
 //            return
 //        }
-//    }
+
+        NotificationCenter.default.post(name: Notification.Name(rawValue: "addRetake"), object: nil)
+    }
+
+    @objc func reopenCamera() {
+        openCamera(UIButton(type: .system))
+    }
 
     private func showNoCameraAvailableAlert() {
         let alertController = UIAlertController(title: "No Camera Available", message: nil, preferredStyle: .alert)

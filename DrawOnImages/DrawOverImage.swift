@@ -77,6 +77,7 @@ class DrawOverImage: UIViewController {
 //        self.tabBarSelectColor.delegate = self
         self.toolBar = self.navigationController?.toolbar
         self.navigationController?.setToolbarHidden(false, animated: true)
+
         NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear), name:  NSNotification.Name.UIKeyboardDidShow, object: nil)
 
         NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide), name:  NSNotification.Name.UIKeyboardDidHide, object: nil)
@@ -86,7 +87,11 @@ class DrawOverImage: UIViewController {
         super.didReceiveMemoryWarning()
         print("Memory Warning -- DrawOverImageView")
     }
-    
+
+//    override func viewDidAppear(_ animated: Bool) {
+//        mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
+//    }
+
     // MARK: Setup Initial image
     /**
      Set up background image to be merged when the edits are complete
@@ -215,7 +220,10 @@ class DrawOverImage: UIViewController {
 
     @objc func resetScrolledViewOnKeyboardHide(notification: Notification) {
 
-        mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        UIView.animate(withDuration: 0.2, animations: ({
+            self.mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        }), completion: nil)
+
         mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
 
     }

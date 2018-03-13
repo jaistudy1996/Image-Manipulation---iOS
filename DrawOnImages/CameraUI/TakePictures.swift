@@ -33,6 +33,9 @@ class TakePicture: UIPageViewController {
             setViewControllers([firstViewController], direction: .forward, animated: true, completion: nil)
         }
         configurePageControl(currentPageNumber: 0, totalNumberofPages: orderedViewControllers.count)
+
+        // add notification observer to add retake image icon
+        NotificationCenter.default.addObserver(self, selector: #selector(addRetakeImageButtonToTabBar), name: Notification.Name(rawValue: "addRetake"), object: nil)
     }
     override func didReceiveMemoryWarning() {
         print("Memory warning -- TakePictures")
@@ -79,6 +82,24 @@ class TakePicture: UIPageViewController {
     @IBAction func saveImage(_ sender: UIBarButtonItem) {
         if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
             vc.saveImage()
+        }
+    }
+
+    @objc
+    private func addRetakeImageButtonToTabBar() {
+        if ((self.toolbarItems?.count)! < 7) {
+            let retakeImage = UIBarButtonItem(image: #imageLiteral(resourceName: "retakeImage"), style: .plain, target: self, action: #selector(reopenCamera))
+            self.toolbarItems?.append(retakeImage)
+            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
+            self.toolbarItems?.append(flexibleSpace)
+        } else {
+            return
+        }
+    }
+
+    @objc func reopenCamera() {
+        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
+            vc.reopenCamera()
         }
     }
 
@@ -156,5 +177,6 @@ extension TakePicture: UIPageViewControllerDelegate {
         let pageContentViewController = pageViewController.viewControllers![0]
         self.pageControl.currentPage = orderedViewControllers.index(of: pageContentViewController)!
         self.currentPage = self.pageControl.currentPage
+        self.toolbarItems?.removeLast(2)    // remove the retake image icon when the user swipes over to next view
     }
 }

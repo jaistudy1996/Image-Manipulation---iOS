@@ -11,12 +11,14 @@ import Foundation
 import UIKit
 
 class CaptureImageVC: UIViewController {
-    
-    @IBOutlet weak var tabBar: UITabBar!
+
     @IBOutlet weak var previewImage: UIImageView!
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tabBar.delegate = self
+
+        // handle notifications
+//        NotificationCenter.default.addObserver(self, selector: Selector(("editImage")), name: Notification.Name(rawValue: "instantiateImageEdit"), object: nil)
     }
     
     @IBOutlet weak var takeImage: UIButton!
@@ -35,6 +37,23 @@ class CaptureImageVC: UIViewController {
             print("Camera not available")
         }
     }
+
+    func editImage() {
+        let drawOverImageVC = DrawOverImage.fromStoryboard()
+        drawOverImageVC.delgate = self as DrawOverImageDelegate
+        drawOverImageVC.imageForMainImage = previewImage.image
+        drawOverImageVC.textFieldsInfo = textEdits
+        self.present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
+    }
+
+    func saveImage() {
+        if previewImage.image != nil {
+            UIImageWriteToSavedPhotosAlbum(previewImage.image!, self, #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+        } else {
+            return
+        }
+    }
+
 }
 
 extension CaptureImageVC: UIImagePickerControllerDelegate {
@@ -45,7 +64,6 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             return
         }
         setPreviewImage(capturedImage)
-        tabBar.selectedItem = nil // after taking the picture set selected item as nil
         picker.dismiss(animated: true, completion: nil)
     }
     
@@ -59,18 +77,18 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             sub.removeFromSuperview()
         }
 
-        addRetakeImageButtonToTabBar()
+//        addRetakeImageButtonToTabBar()
     }
     
-    private func addRetakeImageButtonToTabBar() {
-        if (tabBar.items?.count)! < 3 {
-            let retakeImage = UITabBarItem(title: "Retake", image: #imageLiteral(resourceName: "retakeImage"), tag: 2)
-            tabBar.items?.append(retakeImage)
-        } else {
-            return
-        }
-    }
-    
+//    private func addRetakeImageButtonToTabBar() {
+//        if (tabBar.items?.count)! < 3 {
+//            let retakeImage = UITabBarItem(title: "Retake", image: #imageLiteral(resourceName: "retakeImage"), tag: 2)
+//            tabBar.items?.append(retakeImage)
+//        } else {
+//            return
+//        }
+//    }
+
     private func showNoCameraAvailableAlert() {
         let alertController = UIAlertController(title: "No Camera Available", message: nil, preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
@@ -78,7 +96,6 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
     }
     
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        tabBar.selectedItem = nil // if the user clicks cancel remove the currently selected button
         picker.dismiss(animated: true, completion: nil)
     }
 }
@@ -94,7 +111,8 @@ extension CaptureImageVC: UITabBarDelegate {
             drawOverImageVC.delgate = self as DrawOverImageDelegate
             drawOverImageVC.imageForMainImage = previewImage.image
             drawOverImageVC.textFieldsInfo = textEdits
-            self.present(drawOverImageVC, animated: true, completion: nil)
+//            UINavigationController(rootViewController: drawOverImageVC)
+            self.present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
         }
         if item.tag == 1 { // trigger for save image
             if previewImage.image != nil {
@@ -117,7 +135,7 @@ extension CaptureImageVC: UITabBarDelegate {
             let alertVC = UIAlertController(title: "Image Saved", message: nil, preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
             present(alertVC, animated: true, completion: nil)
-            tabBar.selectedItem = nil
+//            tabBar.selectedItem = nil
         }
     }
 }

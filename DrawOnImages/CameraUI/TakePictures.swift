@@ -11,15 +11,20 @@ import Foundation
 import UIKit
 
 class TakePicture: UIPageViewController {
+
+    var currentPage: Int = 0
     
     private(set) lazy var orderedViewControllers: [UIViewController] = {
         return [self.newImageCaptureViewController(identifier: "CaptureImageViewController")]
     }()
+
     private func newImageCaptureViewController(identifier: String) -> UIViewController {
         return UIStoryboard(name: "TakePictures", bundle: nil) .
             instantiateViewController(withIdentifier: "CaptureImageViewController")
     }
+
     var pageControl = UIPageControl()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataSource = self
@@ -64,6 +69,19 @@ class TakePicture: UIPageViewController {
             return 1 // TODO: work on this func
         }
     }
+
+    @IBAction func editImage(_ sender: UIBarButtonItem) {
+        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
+            vc.editImage()
+        }
+    }
+
+    @IBAction func saveImage(_ sender: UIBarButtonItem) {
+        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
+            vc.saveImage()
+        }
+    }
+
 }
 
 extension TakePicture: UIPageViewControllerDataSource {
@@ -137,5 +155,6 @@ extension TakePicture: UIPageViewControllerDelegate {
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         let pageContentViewController = pageViewController.viewControllers![0]
         self.pageControl.currentPage = orderedViewControllers.index(of: pageContentViewController)!
+        self.currentPage = self.pageControl.currentPage
     }
 }

@@ -31,15 +31,12 @@ extension TextFieldInfo: Hashable {
 
 class DrawOverImage: UIViewController {
 
-    // setting up scroll view
-//    @IBOutlet var mainScrollView: UIScrollView!
-
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
     lazy var strokeColor: UIColor = UIColor.black
     lazy var iPhoneColorSliderView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    weak var toolBar: UIToolbar!
     
-    @IBOutlet weak var tabBarSelectColor: UITabBar!
     weak var delgate: DrawOverImageDelegate?
     
     @IBOutlet weak var editsForImage: UIImageView!
@@ -70,11 +67,10 @@ class DrawOverImage: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpImage()
-        self.tabBarSelectColor.delegate = self
+//        self.tabBarSelectColor.delegate = self
+        self.toolBar = self.navigationController?.toolbar
+        self.navigationController?.setToolbarHidden(false, animated: true)
 
-        // set up zoom for scroll view
-//        mainScrollView.maximumZoomScale = 5.0
-//        mainScrollView.minimumZoomScale = 0.0
     }
 
     override func didReceiveMemoryWarning() {
@@ -101,7 +97,7 @@ class DrawOverImage: UIViewController {
     @IBAction func tapGesture(_ gesture: UITapGestureRecognizer) {
         if gesture.state == .recognized {
             // remove selection from tab bar when the user starts to scribble.
-            tabBarSelectColor.selectedItem = nil
+//            tabBarSelectColor.selectedItem = nil
             if UIDevice.current.userInterfaceIdiom == .phone {
                 iPhoneColorSliderView.removeFromSuperview() // remove color selector when user taps on the screen
             }
@@ -220,8 +216,9 @@ extension DrawOverImage: StoryboardInitializable {
 }
 
 // swiftlint:disable line_length
-extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelegate {
-    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
+extension DrawOverImage: UIPopoverPresentationControllerDelegate {
+
+    @IBAction func colorSelect(_ sender: UIBarButtonItem) {
         print("Change color selected")
         // the device is an iPad
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -233,23 +230,25 @@ extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelega
             let popoverVC = vc.popoverPresentationController
             popoverVC?.permittedArrowDirections = .down
             popoverVC?.delegate = self
-            popoverVC?.sourceView = tabBarSelectColor
+//            popoverVC?.sourceView = tabBarSelectColor
+            popoverVC?.sourceView = toolBar
             let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
             colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
             colorSlider.frame = CGRect(x: 10, y: 70, width: 200, height: 20)
             vc.view.addSubview(colorSlider)
             present(vc, animated: true, completion: nil)
         }
-        
+
         // if the device is an iPhone
         if UIDevice.current.userInterfaceIdiom == .phone {
             // remove color slider view just in case it is already on the screeen
             iPhoneColorSliderView.removeFromSuperview()
-            
-            let tabBarFrame = tabBarSelectColor.frame
-            let frame = CGRect(x: 10, y: tabBarFrame.origin.y - tabBarFrame.height, width: tabBarFrame.width - 40, height: tabBarFrame.height)
+
+//            let tabBarFrame = tabBarSelectColor.frame
+            let toolbarFrame = toolBar.frame
+            let frame = CGRect(x: 10, y: toolbarFrame.origin.y - toolbarFrame.height, width: toolbarFrame.width - 40, height: toolbarFrame.height)
             iPhoneColorSliderView = UIView(frame: frame)
-            
+
             // add colorSlider
             let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
             colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
@@ -259,13 +258,9 @@ extension DrawOverImage: UITabBarDelegate, UIPopoverPresentationControllerDelega
             self.view.addSubview(iPhoneColorSliderView)
         }
     }
-    
+
     @objc func changeDrawLineColor(_ colorSlider: ColorSlider) {
         strokeColor = colorSlider.color
-    }
-    
-    func adaptivePresentationStyle(for controller: UIPresentationController) -> UIModalPresentationStyle {
-        return .none
     }
 }
 

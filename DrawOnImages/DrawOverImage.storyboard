@@ -18,27 +18,47 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mzj-Gf-V55">
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mzj-Gf-V55">
                                 <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                                 <subviews>
-                                    <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hIi-fl-dhT" userLabel="mainImage">
+                                    <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VPz-bM-NQI">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
-                                        <gestureRecognizers/>
-                                    </imageView>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-54-97F" userLabel="editsForImage">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                    </imageView>
+                                        <subviews>
+                                            <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="hIi-fl-dhT" userLabel="mainImage">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                                <gestureRecognizers/>
+                                            </imageView>
+                                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="2l9-54-97F" userLabel="editsForImage">
+                                                <rect key="frame" x="0.0" y="0.0" width="375" height="559"/>
+                                                <gestureRecognizers/>
+                                            </imageView>
+                                        </subviews>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <constraints>
+                                            <constraint firstAttribute="bottom" secondItem="2l9-54-97F" secondAttribute="bottom" id="0Ne-qg-Hdl"/>
+                                            <constraint firstItem="2l9-54-97F" firstAttribute="top" secondItem="VPz-bM-NQI" secondAttribute="top" id="GXF-Ys-zDw"/>
+                                            <constraint firstAttribute="trailing" secondItem="2l9-54-97F" secondAttribute="trailing" id="R7A-bY-yKH"/>
+                                            <constraint firstAttribute="bottom" secondItem="hIi-fl-dhT" secondAttribute="bottom" id="e0Z-Vr-i5v"/>
+                                            <constraint firstItem="2l9-54-97F" firstAttribute="leading" secondItem="VPz-bM-NQI" secondAttribute="leading" id="fkN-vS-S2m"/>
+                                            <constraint firstAttribute="trailing" secondItem="hIi-fl-dhT" secondAttribute="trailing" id="ghX-Nt-xep"/>
+                                            <constraint firstItem="hIi-fl-dhT" firstAttribute="top" secondItem="VPz-bM-NQI" secondAttribute="top" id="imV-l8-JI3"/>
+                                            <constraint firstItem="hIi-fl-dhT" firstAttribute="leading" secondItem="VPz-bM-NQI" secondAttribute="leading" id="wPf-kh-DUH"/>
+                                        </constraints>
+                                        <connections>
+                                            <outletCollection property="gestureRecognizers" destination="nnp-79-t6o" appends="YES" id="NBZ-8m-5Qy"/>
+                                            <outletCollection property="gestureRecognizers" destination="Lmh-yO-bnJ" appends="YES" id="NV1-if-gEQ"/>
+                                        </connections>
+                                    </view>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="centerX" secondItem="Mzj-Gf-V55" secondAttribute="centerX" id="7V3-NO-nC4"/>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="leading" secondItem="Mzj-Gf-V55" secondAttribute="leading" id="Akd-TN-JxM"/>
-                                    <constraint firstAttribute="trailing" secondItem="hIi-fl-dhT" secondAttribute="trailing" id="DCw-Cj-1fV"/>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="bottom" secondItem="Mzj-Gf-V55" secondAttribute="bottom" id="PpO-Bd-4K8"/>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="centerY" secondItem="Mzj-Gf-V55" secondAttribute="centerY" id="Tay-pv-uZZ"/>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="leading" secondItem="Mzj-Gf-V55" secondAttribute="leading" id="ceo-Pa-ChI"/>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="trailing" secondItem="Mzj-Gf-V55" secondAttribute="trailing" id="vhO-U6-66x"/>
-                                    <constraint firstItem="hIi-fl-dhT" firstAttribute="top" secondItem="Mzj-Gf-V55" secondAttribute="top" id="w0r-YX-AK7"/>
+                                    <constraint firstAttribute="bottom" secondItem="VPz-bM-NQI" secondAttribute="bottom" id="8xO-oM-i6d"/>
+                                    <constraint firstItem="VPz-bM-NQI" firstAttribute="centerY" secondItem="Mzj-Gf-V55" secondAttribute="centerY" id="Bai-0J-1tG"/>
+                                    <constraint firstItem="VPz-bM-NQI" firstAttribute="width" secondItem="Mzj-Gf-V55" secondAttribute="width" id="Hxd-Ls-tWW"/>
+                                    <constraint firstItem="VPz-bM-NQI" firstAttribute="centerX" secondItem="Mzj-Gf-V55" secondAttribute="centerX" id="Pxn-GM-edf"/>
+                                    <constraint firstItem="VPz-bM-NQI" firstAttribute="height" secondItem="Mzj-Gf-V55" secondAttribute="height" id="QLr-IP-rtA"/>
+                                    <constraint firstItem="VPz-bM-NQI" firstAttribute="top" secondItem="Mzj-Gf-V55" secondAttribute="top" id="gkb-Ib-0u8"/>
+                                    <constraint firstItem="VPz-bM-NQI" firstAttribute="leading" secondItem="Mzj-Gf-V55" secondAttribute="leading" id="lEN-5T-HvO"/>
+                                    <constraint firstAttribute="trailing" secondItem="VPz-bM-NQI" secondAttribute="trailing" id="wgW-Ty-B8I"/>
                                 </constraints>
                             </scrollView>
                         </subviews>
@@ -70,13 +90,14 @@
                     <connections>
                         <outlet property="editsForImage" destination="2l9-54-97F" id="4iJ-Uw-rqe"/>
                         <outlet property="mainImage" destination="hIi-fl-dhT" id="Urr-2F-ckM"/>
+                        <outlet property="mainScrollView" destination="Mzj-Gf-V55" id="Iva-bM-1xw"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="tdW-EB-iS6" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <panGestureRecognizer minimumNumberOfTouches="1" id="Lmh-yO-bnJ">
                     <connections>
                         <action selector="panGesture:" destination="SAA-hg-cMN" id="Mxz-0P-eY9"/>
-                        <outlet property="delegate" destination="SAA-hg-cMN" id="gbe-SJ-u0Z"/>
+                        <outlet property="delegate" destination="Mzj-Gf-V55" id="Zml-bk-Let"/>
                     </connections>
                 </panGestureRecognizer>
                 <tapGestureRecognizer id="nnp-79-t6o">
@@ -86,7 +107,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="396" y="97"/>
+            <point key="canvasLocation" x="585" y="97"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="J1Y-Wn-VPR">

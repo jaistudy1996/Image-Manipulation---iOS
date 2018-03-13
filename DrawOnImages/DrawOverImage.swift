@@ -31,6 +31,12 @@ extension TextFieldInfo: Hashable {
 
 class DrawOverImage: UIViewController {
 
+    // scroll view
+    @IBOutlet weak var mainScrollView: UIScrollView!
+
+    // current editing text field
+    var currentTextField: UITextField? = nil
+
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
     lazy var strokeColor: UIColor = UIColor.black
@@ -51,6 +57,7 @@ class DrawOverImage: UIViewController {
             return
         }
         delgate?.doneEditing(image: imageForDelegate, textEdits: textFieldsInfo)
+        // TODO: remove observers
         dismiss(animated: true, completion: nil)
     }
     
@@ -70,7 +77,9 @@ class DrawOverImage: UIViewController {
 //        self.tabBarSelectColor.delegate = self
         self.toolBar = self.navigationController?.toolbar
         self.navigationController?.setToolbarHidden(false, animated: true)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear), name:  NSNotification.Name.UIKeyboardDidShow, object: nil)
 
+        NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide), name:  NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -168,18 +177,6 @@ class DrawOverImage: UIViewController {
             ctx.cgContext.addRect(rectangle)
             mainImage.image?.draw(in: rectangle)
             editsForImage.image?.draw(in: rectangle)
-//            for case let view as UITextField in editsForImage.subviews {
-//                let text = view.text!
-//                text.draw(with: rectangle, options: .usesLineFragmentOrigin, attributes: nil, context: nil)
-//            }
-
-//            let paragraphStyle = NSMutableParagraphStyle()
-//            paragraphStyle.alignment = .center
-//
-//            let attrs = [NSAttributedStringKey.font: UIFont(name: "HelveticaNeue-Thin", size: 36)!, NSAttributedStringKey.paragraphStyle: paragraphStyle]
-
-//            let string = "How much wood would a woodchuck\nchuck if a woodchuck would chuck wood?"
-//            string.draw(with: CGRect(x: 32, y: 32, width: 448, height: 448), options: .usesLineFragmentOrigin, attributes: nil, context: nil) // .usesLineFragmentOrigin, attributes: attrs, context: nil)
         }
         mainImage.image = img
     }
@@ -190,6 +187,8 @@ class DrawOverImage: UIViewController {
         let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 100, height: 100)))
         textfield.delegate = self
         editsForImage.addSubview(textfield)
+        textfield.becomeFirstResponder() // make this first responder in order to show keyboard and let the user type
+        currentTextField = textfield // set current to the one being edited
     }
 
     private func mergeTextFields() {
@@ -202,6 +201,23 @@ class DrawOverImage: UIViewController {
             }
         }
         editsForImage.image = img
+    }
+
+    @objc func insetTextFieldOnKeyboardAppear(notification: Notification) {
+        print(notification)
+        let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
+        mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame?.height ?? 0, right: 0)
+
+        if let _ = currentTextField?.frame {
+            mainScrollView.scrollRectToVisible(currentTextField!.frame, animated: true)
+        }
+    }
+
+    @objc func resetScrolledViewOnKeyboardHide(notification: Notification) {
+
+        mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+        mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
+
     }
 }
 
@@ -267,6 +283,7 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 extension DrawOverImage: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
+        self.currentTextField = nil // remove any current textfield
         return true
     }
 
@@ -288,11 +305,5 @@ extension DrawOverImage: UITextFieldDelegate {
         } else {
             textFieldsInfo.append(tempField)
         }
-    }
-}
-
-extension DrawOverImage: UIScrollViewDelegate{
-    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
-        return mainImage
     }
 }

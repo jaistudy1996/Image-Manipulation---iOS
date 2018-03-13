@@ -177,6 +177,17 @@ extension TakePicture: UIPageViewControllerDelegate {
         let pageContentViewController = pageViewController.viewControllers![0]
         self.pageControl.currentPage = orderedViewControllers.index(of: pageContentViewController)!
         self.currentPage = self.pageControl.currentPage
-        self.toolbarItems?.removeLast(2)    // remove the retake image icon when the user swipes over to next view
+
+        // configure toolbar
+        if (self.toolbarItems?.count)! > 5 {
+            self.toolbarItems?.removeLast(2)    // remove the retake image icon when the user swipes over to next view
+        }
+
+        // add retake image button again
+        if let vc = self.orderedViewControllers[self.currentPage] as? CaptureImageVC {
+            if vc.takeImage == nil {
+                self.addRetakeImageButtonToTabBar()
+            }
+        }
     }
 }

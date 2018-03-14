@@ -40,6 +40,7 @@ class DrawOverImage: UIViewController {
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
     lazy var strokeColor: UIColor = UIColor.black
+    lazy var textColor: UIColor = UIColor.black
     lazy var iPhoneColorSliderView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     weak var toolBar: UIToolbar!
     
@@ -193,6 +194,7 @@ class DrawOverImage: UIViewController {
         let y = loc.y - 20
         let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 100, height: 100)))
         textfield.delegate = self
+        textfield.textColor = textColor
         editsForImage.addSubview(textfield)
         textfield.becomeFirstResponder() // make this first responder in order to show keyboard and let the user type
         currentTextField = textfield // set current to the one being edited
@@ -287,6 +289,7 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 
     @objc func changeDrawLineColor(_ colorSlider: ColorSlider) {
         strokeColor = colorSlider.color
+        textColor = colorSlider.color
     }
 }
 

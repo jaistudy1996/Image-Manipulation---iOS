@@ -17,6 +17,7 @@ protocol DrawOverImageDelegate: class {
 struct TextFieldInfo {
     var frame: CGRect
     var text: String
+    var textColor: UIColor = UIColor.black
 }
 
 extension TextFieldInfo: Hashable {
@@ -89,10 +90,6 @@ class DrawOverImage: UIViewController {
         print("Memory Warning -- DrawOverImageView")
     }
 
-//    override func viewDidAppear(_ animated: Bool) {
-//        mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
-//    }
-
     // MARK: Setup Initial image
     /**
      Set up background image to be merged when the edits are complete
@@ -100,12 +97,18 @@ class DrawOverImage: UIViewController {
     */
     private func setUpImage() {
         mainImage.image = imageForMainImage
+
         imageForMainImage = nil // dealloc imageformainimage
         for textEdit in textFieldsInfo {
             let textfield = UITextField(frame: textEdit.frame)
             textfield.text = textEdit.text
+            textfield.textColor = textEdit.textColor
             editsForImage.addSubview(textfield)
         }
+//        if let tempEdit = editsForImage {
+//            mainImage.addSubview(tempEdit)
+//            editsForImage = tempEdit
+//        }
     }
     
     // MARK: Setup touch gestures
@@ -192,7 +195,7 @@ class DrawOverImage: UIViewController {
     private func addSmallView(loc: CGPoint) {
         let x = loc.x - 20
         let y = loc.y - 20
-        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 100, height: 100)))
+        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 44, height: 44)))
         textfield.delegate = self
         textfield.textColor = textColor
         editsForImage.addSubview(textfield)
@@ -213,7 +216,6 @@ class DrawOverImage: UIViewController {
     }
 
     @objc func insetTextFieldOnKeyboardAppear(notification: Notification) {
-        print(notification)
         let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame?.height ?? 0, right: 0)
 
@@ -301,7 +303,7 @@ extension DrawOverImage: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        let tempField = TextFieldInfo(frame: textField.frame, text: textField.text!)
+        let tempField = TextFieldInfo(frame: textField.frame, text: textField.text!, textColor: self.textColor)
         if let index = textFieldsInfo.index(of: tempField) {
             print("Index at: \(index)")
             if let newText = textField.text{

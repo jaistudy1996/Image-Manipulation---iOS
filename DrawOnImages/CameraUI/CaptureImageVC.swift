@@ -161,6 +161,7 @@ extension CaptureImageVC: DrawOverImageDelegate {
         for textEdit in textEdits {
             let textfield = UITextField(frame: textEdit.frame)
             textfield.text = textEdit.text
+            textfield.textColor = textEdit.textColor
             previewImage.addSubview(textfield)
         }
     }

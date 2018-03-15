@@ -12,13 +12,15 @@ import UIKit
 
 class CaptureImageVC: UIViewController {
 
+    var imageForPreviewImage: UIImage? = nil
     @IBOutlet weak var previewImage: UIImageView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        // handle notifications
-//        NotificationCenter.default.addObserver(self, selector: Selector(("editImage")), name: Notification.Name(rawValue: "instantiateImageEdit"), object: nil)
+        if let prevImage = imageForPreviewImage {
+            setPreviewImage(prevImage)
+        }
     }
     
     @IBOutlet weak var takeImage: UIButton!
@@ -76,6 +78,10 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             takeImage.removeFromSuperview() // remove the take image button after setting the preview image
         }
 
+        if imageForPreviewImage != nil {
+            imageForPreviewImage = nil
+        }
+
         for sub in previewImage.subviews {
             sub.removeFromSuperview()
         }
@@ -84,15 +90,8 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
     }
     
     private func addRetakeImageButtonToTabBar() {
-
-//        if ((self.toolbarItems?.count)! < 3) {
-//            let retakeImage = UIBarButtonItem(image: #imageLiteral(resourceName: "retakeImage"), style: .plain, target: self, action: #selector(reopenCamera))
-//            self.toolbarItems?.append(retakeImage)
-//        } else {
-//            return
-//        }
-
-        NotificationCenter.default.post(name: Notification.Name(rawValue: "addRetake"), object: nil)
+        let parent  = self.parent as? TakePicture
+        parent?.addRetakeImageButtonToTabBar()
     }
 
     @objc func reopenCamera() {

@@ -76,7 +76,6 @@ class DrawOverImage: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpImage()
-//        self.tabBarSelectColor.delegate = self
         self.toolBar = self.navigationController?.toolbar
         self.navigationController?.setToolbarHidden(false, animated: true)
 
@@ -105,17 +104,13 @@ class DrawOverImage: UIViewController {
             textfield.textColor = textEdit.textColor
             editsForImage.addSubview(textfield)
         }
-//        if let tempEdit = editsForImage {
-//            mainImage.addSubview(tempEdit)
-//            editsForImage = tempEdit
-//        }
+
     }
     
     // MARK: Setup touch gestures
     @IBAction func tapGesture(_ gesture: UITapGestureRecognizer) {
         if gesture.state == .recognized {
             // remove selection from tab bar when the user starts to scribble.
-//            tabBarSelectColor.selectedItem = nil
             if UIDevice.current.userInterfaceIdiom == .phone {
                 iPhoneColorSliderView.removeFromSuperview() // remove color selector when user taps on the screen
             }
@@ -148,8 +143,8 @@ class DrawOverImage: UIViewController {
      Connect two points using a line
      
      - parameters:
-        - from: The starting point for line to be drawn
-        - to: The ending point for line to be drawn
+        - from: The starting point for line to be draw
+     n        - to: The ending point for line to be drawn
     */
     private func drawLine(from: CGPoint, to: CGPoint) {
         let size = editsForImage.frame.size

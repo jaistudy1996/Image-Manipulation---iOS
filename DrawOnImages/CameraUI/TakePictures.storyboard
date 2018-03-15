@@ -45,7 +45,13 @@
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="Jlw-bW-yPp"/>
                     </toolbarItems>
-                    <navigationItem key="navigationItem" id="2qd-RV-5eJ"/>
+                    <navigationItem key="navigationItem" id="2qd-RV-5eJ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="eWB-fJ-EbC">
+                            <connections>
+                                <action selector="addNewPicture:" destination="xnb-SP-UyE" id="efp-4g-cTO"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8b7-lk-Ddq" userLabel="First Responder" sceneMemberID="firstResponder"/>

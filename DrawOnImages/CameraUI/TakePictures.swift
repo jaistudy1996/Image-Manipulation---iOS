@@ -14,9 +14,9 @@ class TakePicture: UIPageViewController {
 
     var currentPage: Int = 0
 
-    private lazy var retakeButton: UIBarButtonItem = {
-        let retakeImage = UIBarButtonItem(image: #imageLiteral(resourceName: "rubbish-bin"), style: .plain, target: self, action: #selector(reopenCamera))
-        return retakeImage
+    private lazy var deleteImageButton: UIBarButtonItem = {
+        let deleteBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "rubbish-bin"), style: .plain, target: self, action: #selector(deleteImage))
+        return deleteBarButton
     }()
     
     private(set) lazy var orderedViewControllers: [UIViewController] = {
@@ -90,7 +90,7 @@ class TakePicture: UIPageViewController {
     @IBAction func addNewPicture(_ sender: UIBarButtonItem) {
         // open camera to take a new picture
         // must be a new controller otherwise the first view will not be used
-        guard orderedViewControllers.count > 1 else {
+        guard (orderedViewControllers[currentPage] as? CaptureImageVC)?.previewImage.image != nil else {
             (orderedViewControllers.first as? CaptureImageVC)?.openCamera(UIButton()) // just to invoke the method
             return
         }
@@ -111,21 +111,28 @@ class TakePicture: UIPageViewController {
         }
     }
 
-    func addRetakeImageButtonToTabBar() {
+    func addDeleteImageButtonToTabBar() {
         if let toolbarItems = toolbarItems,
-            toolbarItems.contains(retakeButton) {
+            toolbarItems.contains(deleteImageButton) {
 
         } else {
-            self.toolbarItems?.append(retakeButton)
+            self.toolbarItems?.append(deleteImageButton)
             let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
             self.toolbarItems?.append(flexibleSpace)
         }
     }
 
-    @objc func reopenCamera() {
-        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
-            vc.reopenCamera()
+    @objc func deleteImage() {
+        guard orderedViewControllers.count > 1 else  {
+            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
+            capVC?.previewImage.image = nil
+            capVC?.takeImage.isHidden = false
+//            capVC?.takeImage.setBackgroundImage(#imageLiteral(resourceName: "image-add-button"), for: .normal)
+            return
         }
+        orderedViewControllers.remove(at: self.currentPage)
+        self.currentPage = orderedViewControllers.count - 1 // reset currentpage
+        setViewControllers([orderedViewControllers[self.currentPage]], direction: .reverse, animated: true, completion: nil)
     }
 
 }
@@ -190,10 +197,10 @@ extension TakePicture: UIPageViewControllerDelegate {
         self.currentPage = orderedViewControllers.index(of: pageContentViewController)!
         self.pageControl.currentPage = self.currentPage
 
-        // add retake image button again
+        // add delete image button again
         if let vc = self.orderedViewControllers[self.currentPage] as? CaptureImageVC {
             if vc.takeImage == nil {
-                self.addRetakeImageButtonToTabBar()
+                self.addDeleteImageButtonToTabBar()
             }
         }
     }

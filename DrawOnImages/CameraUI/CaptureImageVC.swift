@@ -74,8 +74,9 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
 
         textEdits.removeAll() // remove all textedits in case the user takes a new picture
 
-        if takeImage != nil {
-            takeImage.removeFromSuperview() // remove the take image button after setting the preview image
+        if takeImage.isHidden == false {
+            takeImage.isHidden = true
+//            takeImage.removeFromSuperview() // remove the take image button after setting the preview image
         }
 
         if imageForPreviewImage != nil {
@@ -91,7 +92,7 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
     
     private func addRetakeImageButtonToTabBar() {
         let parent  = self.parent as? TakePicture
-        parent?.addRetakeImageButtonToTabBar()
+        parent?.addDeleteImageButtonToTabBar()
     }
 
     @objc func reopenCamera() {

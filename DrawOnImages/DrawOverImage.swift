@@ -52,7 +52,10 @@ class DrawOverImage: UIViewController {
     @IBAction func doneEditing(_ sender: UIBarButtonItem) {
         
         // Merge two images before exiting view controller
-        mergeImage()
+        // only merge if there is a background image
+        if let _ = mainImage.image {
+            mergeImage()
+        }
         editsForImage = nil // free unnecessary memory usage.
         guard let imageForDelegate = mainImage.image else {
             dismiss(animated: true, completion: nil)
@@ -266,21 +269,24 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 
         // if the device is an iPhone
         if UIDevice.current.userInterfaceIdiom == .phone {
-            // remove color slider view just in case it is already on the screeen
-            iPhoneColorSliderView.removeFromSuperview()
+            if iPhoneColorSliderView.superview != nil {
+                // remove color slider view just in case it is already on the screeen
+                iPhoneColorSliderView.removeFromSuperview()
+            } else {
 
-//            let tabBarFrame = tabBarSelectColor.frame
-            let toolbarFrame = toolBar.frame
-            let frame = CGRect(x: 10, y: toolbarFrame.origin.y - toolbarFrame.height - 20, width: toolbarFrame.width - 40, height: toolbarFrame.height)
-            iPhoneColorSliderView = UIView(frame: frame)
+    //            let tabBarFrame = tabBarSelectColor.frame
+                let toolbarFrame = toolBar.frame
+                let frame = CGRect(x: 10, y: toolbarFrame.origin.y - 100, width: toolbarFrame.width - 40, height: toolbarFrame.height)
+                iPhoneColorSliderView = UIView(frame: frame)
 
-            // add colorSlider
-            let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
-            colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
-            colorSlider.frame = CGRect(x: 10, y: 0, width: iPhoneColorSliderView.frame.width, height: 20)
-            iPhoneColorSliderView.tag = 3 // Tag 3 is for the colorslider view.
-            iPhoneColorSliderView.addSubview(colorSlider)
-            self.view.addSubview(iPhoneColorSliderView)
+                // add colorSlider
+                let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
+                colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
+                colorSlider.frame = CGRect(x: 10, y: 0, width: iPhoneColorSliderView.frame.width, height: 20)
+                iPhoneColorSliderView.tag = 3 // Tag 3 is for the colorslider view.
+                iPhoneColorSliderView.addSubview(colorSlider)
+                self.view.addSubview(iPhoneColorSliderView)
+            }
         }
     }
 

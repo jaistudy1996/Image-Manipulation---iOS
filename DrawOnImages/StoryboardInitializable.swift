@@ -25,7 +25,8 @@ protocol StoryboardInitializable: class {
 extension StoryboardInitializable where Self: UIViewController {
     
     static func fromStoryboard() -> Self {
-        guard let viewController = containingStoryboard?.instantiateViewController(withIdentifier: storyboardSceneID) as? Self
+        guard let viewController = containingStoryboard?
+                                            .instantiateViewController(withIdentifier: storyboardSceneID) as? Self
             else { fatalError(
                 "Something went wrong. Check to make sure the parameters are what you expect:\n\t" +
                     "storyboardName: \(storyboardName)\n\t" +

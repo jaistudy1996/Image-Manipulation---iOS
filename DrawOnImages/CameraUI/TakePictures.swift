@@ -123,22 +123,22 @@ class TakePicture: UIPageViewController {
     }
 
     @objc func deleteImage() {
-        guard orderedViewControllers.count > 1 else  {
+        guard orderedViewControllers.count > 1 else {
             let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
-            capVC?.previewImage.image = nil
-            capVC?.takeImage.isHidden = false
-//            capVC?.takeImage.setBackgroundImage(#imageLiteral(resourceName: "image-add-button"), for: .normal)
+            capVC?.deleteImage()
             return
         }
         orderedViewControllers.remove(at: self.currentPage)
         self.currentPage = orderedViewControllers.count - 1 // reset currentpage
-        setViewControllers([orderedViewControllers[self.currentPage]], direction: .reverse, animated: true, completion: nil)
+        setViewControllers([orderedViewControllers[self.currentPage]],
+                           direction: .reverse, animated: true, completion: nil)
     }
 
 }
 
 extension TakePicture: UIPageViewControllerDataSource {
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerBefore viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
         guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
 
@@ -149,7 +149,8 @@ extension TakePicture: UIPageViewControllerDataSource {
         return orderedViewControllers[prevIndex]
     }
     
-    func pageViewController(_ pageViewController: UIPageViewController, viewControllerAfter viewController: UIViewController) -> UIViewController? {
+    func pageViewController(_ pageViewController: UIPageViewController,
+                            viewControllerAfter viewController: UIViewController) -> UIViewController? {
 
         guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
         
@@ -176,14 +177,17 @@ extension TakePicture: UIPageViewControllerDataSource {
 extension TakePicture: UIPageViewControllerDelegate {
     func configurePageControl(currentPageNumber: Int, totalNumberofPages: Int) {
         
-        if self.view.subviews.index(of: pageControl) != nil  {
+        if self.view.subviews.index(of: pageControl) != nil {
             // remove and add page control again when a new view needs to be added
             pageControl.removeFromSuperview()
         }
         
         // The total number of pages that are available is based on how many available colors we have.
-        pageControl = UIPageControl(frame: CGRect(x: 0, y: UIScreen.main.bounds.maxY - 70, width: UIScreen.main.bounds.width, height: 10))
-        self.pageControl.numberOfPages = totalNumberofPages // increase number by 1 to hint user that there is something on the next page
+        pageControl = UIPageControl(frame: CGRect(x: 0, y: UIScreen.main.bounds.maxY - 70,
+                                                  width: UIScreen.main.bounds.width, height: 10))
+        self.pageControl.numberOfPages = totalNumberofPages
+                        // increase number by 1 to hint user that there is something on the next page
+
         self.pageControl.currentPage = currentPageNumber
         self.pageControl.tintColor = UIColor.black
         self.pageControl.pageIndicatorTintColor = UIColor.white
@@ -192,7 +196,8 @@ extension TakePicture: UIPageViewControllerDelegate {
         self.view.addSubview(pageControl)
     }
 
-    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool, previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
+    func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool,
+                            previousViewControllers: [UIViewController], transitionCompleted completed: Bool) {
         let pageContentViewController = pageViewController.viewControllers![0]
         self.currentPage = orderedViewControllers.index(of: pageContentViewController)!
         self.pageControl.currentPage = self.currentPage
@@ -211,7 +216,7 @@ extension TakePicture: UINavigationControllerDelegate {
 }
 
 extension TakePicture: UIImagePickerControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
 
         guard let newController = createViewController() else {
             let alert = UIAlertController(title: "Error", message: "Cannot add new Image!", preferredStyle: .alert)

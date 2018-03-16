@@ -12,7 +12,7 @@ import UIKit
 
 class CaptureImageVC: UIViewController {
 
-    var imageForPreviewImage: UIImage? = nil
+    var imageForPreviewImage: UIImage?
     @IBOutlet weak var previewImage: UIImageView!
 
     override func viewDidLoad() {
@@ -50,9 +50,22 @@ class CaptureImageVC: UIViewController {
 
     func saveImage() {
         if previewImage.image != nil {
-            UIImageWriteToSavedPhotosAlbum(previewImage.image!, self, #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+            UIImageWriteToSavedPhotosAlbum(previewImage.image!, self,
+                                           #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
         } else {
             return
+        }
+    }
+
+    func deleteImage() {
+        if previewImage.image != nil {
+            previewImage.image = nil
+            takeImage.isHidden = false
+
+            // remove all textfields on delete button
+            for case let textField as UITextField in previewImage.subviews {
+                textField.removeFromSuperview()
+            }
         }
     }
 
@@ -126,7 +139,8 @@ extension CaptureImageVC: UITabBarDelegate {
         }
         if item.tag == 1 { // trigger for save image
             if previewImage.image != nil {
-                UIImageWriteToSavedPhotosAlbum(previewImage.image!, self, #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+                UIImageWriteToSavedPhotosAlbum(previewImage.image!, self,
+                                               #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
             } else {
                 return
             }
@@ -136,7 +150,8 @@ extension CaptureImageVC: UITabBarDelegate {
         }
     }
     
-    @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?, contextInfo: UnsafeRawPointer) {
+    @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?,
+                               contextInfo: UnsafeRawPointer) {
         if error != nil {
             let alertVC = UIAlertController(title: "Error saving image", message: nil, preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))

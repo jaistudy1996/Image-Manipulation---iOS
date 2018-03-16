@@ -25,7 +25,7 @@ extension TextFieldInfo: Hashable {
         return frame.origin.x.hashValue ^ frame.origin.y.hashValue //&* 16777619
     }
 
-    static func ==(lhs: TextFieldInfo, rhs: TextFieldInfo) -> Bool {
+    static func == (lhs: TextFieldInfo, rhs: TextFieldInfo) -> Bool {
         return lhs.frame == rhs.frame// && lhs.text == rhs.text
     }
 }
@@ -36,7 +36,7 @@ class DrawOverImage: UIViewController {
     @IBOutlet weak var mainScrollView: UIScrollView!
 
     // current editing text field
-    var currentTextField: UITextField? = nil
+    var currentTextField: UITextField?
 
     // set this variable when instantiating this vc from some other vc
     weak var imageForMainImage: UIImage!
@@ -53,7 +53,7 @@ class DrawOverImage: UIViewController {
         
         // Merge two images before exiting view controller
         // only merge if there is a background image
-        if let _ = mainImage.image {
+        if mainImage.image != nil {
             mergeImage()
         }
         editsForImage = nil // free unnecessary memory usage.
@@ -62,7 +62,11 @@ class DrawOverImage: UIViewController {
             return
         }
         delgate?.doneEditing(image: imageForDelegate, textEdits: textFieldsInfo)
-        // TODO: remove observers
+
+        // remove observers
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+
         dismiss(animated: true, completion: nil)
     }
     
@@ -82,9 +86,11 @@ class DrawOverImage: UIViewController {
         self.toolBar = self.navigationController?.toolbar
         self.navigationController?.setToolbarHidden(false, animated: true)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear), name:  NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear),
+                                               name: NSNotification.Name.UIKeyboardDidShow, object: nil)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide), name:  NSNotification.Name.UIKeyboardDidHide, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide),
+                                               name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
     override func didReceiveMemoryWarning() {
@@ -149,7 +155,7 @@ class DrawOverImage: UIViewController {
         - from: The starting point for line to be draw
      n        - to: The ending point for line to be drawn
     */
-    private func drawLine(from: CGPoint, to: CGPoint) {
+    private func drawLine(from: CGPoint, to toPoint: CGPoint) {
         let size = editsForImage.frame.size
         
         // Start new image context
@@ -163,7 +169,7 @@ class DrawOverImage: UIViewController {
         context?.setLineCap(.round)
 
         context?.move(to: from)
-        context?.addLine(to: to)
+        context?.addLine(to: toPoint)
         context?.strokePath()
 
         editsForImage.image = UIGraphicsGetImageFromCurrentImageContext()
@@ -217,7 +223,7 @@ class DrawOverImage: UIViewController {
         let keyboardFrame = (notification.userInfo?[UIKeyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue
         mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: keyboardFrame?.height ?? 0, right: 0)
 
-        if let _ = currentTextField?.frame {
+        if currentTextField?.frame != nil {
             mainScrollView.scrollRectToVisible(currentTextField!.frame, animated: true)
         }
     }
@@ -307,7 +313,7 @@ extension DrawOverImage: UITextFieldDelegate {
         let tempField = TextFieldInfo(frame: textField.frame, text: textField.text!, textColor: self.textColor)
         if let index = textFieldsInfo.index(of: tempField) {
             print("Index at: \(index)")
-            if let newText = textField.text{
+            if let newText = textField.text {
                 if newText == "" {
                     textField.removeFromSuperview() // remove textfield if it has an empty string
                     textFieldsInfo.remove(at: index)

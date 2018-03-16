@@ -5,7 +5,6 @@
 //  Created by Jayant Arora on 3/1/18.
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
-// swiftlint:disable trailing_whitespace
 
 import Foundation
 import UIKit
@@ -44,7 +43,8 @@ class TakePicture: UIPageViewController {
     }
     
     private func createViewController() -> UIViewController? {
-        guard let newVC = self.storyboard?.instantiateViewController(withIdentifier: "CaptureImageViewController") else {
+        guard let newVC = self.storyboard?
+                                .instantiateViewController(withIdentifier: "CaptureImageViewController") else {
             return nil
         }
         return newVC
@@ -114,7 +114,7 @@ class TakePicture: UIPageViewController {
     func addDeleteImageButtonToTabBar() {
         if let toolbarItems = toolbarItems,
             toolbarItems.contains(deleteImageButton) {
-
+            // do nothing
         } else {
             self.toolbarItems?.append(deleteImageButton)
             let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
@@ -130,8 +130,13 @@ class TakePicture: UIPageViewController {
         }
         orderedViewControllers.remove(at: self.currentPage)
         self.currentPage = orderedViewControllers.count - 1 // reset currentpage
+
+        // set current page to last one
         setViewControllers([orderedViewControllers[self.currentPage]],
                            direction: .reverse, animated: true, completion: nil)
+
+        // update page control
+        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
     }
 
 }
@@ -146,6 +151,7 @@ extension TakePicture: UIPageViewControllerDataSource {
         guard prevIndex >= 0 else { return nil }
         
         guard orderedViewControllers.count > prevIndex else { return nil }
+
         return orderedViewControllers[prevIndex]
     }
     
@@ -158,7 +164,7 @@ extension TakePicture: UIPageViewControllerDataSource {
         guard nextIndex != orderedViewControllers.count else { return nil }
 
         guard orderedViewControllers.count > nextIndex else { return nil }
-        
+
         return orderedViewControllers[nextIndex]
     }
     
@@ -182,18 +188,28 @@ extension TakePicture: UIPageViewControllerDelegate {
             pageControl.removeFromSuperview()
         }
         
-        // The total number of pages that are available is based on how many available colors we have.
-        pageControl = UIPageControl(frame: CGRect(x: 0, y: UIScreen.main.bounds.maxY - 70,
-                                                  width: UIScreen.main.bounds.width, height: 10))
-        self.pageControl.numberOfPages = totalNumberofPages
-                        // increase number by 1 to hint user that there is something on the next page
+        // y value is set to starting point of tool bar - height of tool bar
+        let y = CGFloat((self.navigationController?.toolbar.frame.origin.y)! - 90)
+        pageControl = UIPageControl(frame: CGRect(x: 0, y: y,
+                                                  width: UIScreen.main.bounds.width, height: 30))
+        pageControl.numberOfPages = totalNumberofPages
 
-        self.pageControl.currentPage = currentPageNumber
-        self.pageControl.tintColor = UIColor.black
-        self.pageControl.pageIndicatorTintColor = UIColor.white
-        self.pageControl.currentPageIndicatorTintColor = UIColor.black
-        self.pageControl.backgroundColor = UIColor.clear
+        pageControl.currentPage = currentPageNumber
+        pageControl.tintColor = UIColor.black
+        pageControl.pageIndicatorTintColor = UIColor.white
+        pageControl.currentPageIndicatorTintColor = UIColor.black
+        pageControl.backgroundColor = UIColor.clear
+        pageControl.hidesForSinglePage = true
+
+        // handle when the user clicks the dots itself
+        pageControl.addTarget(self, action: #selector(pageControlDotClicked(page:)), for: .valueChanged)
+
         self.view.addSubview(pageControl)
+    }
+
+    @objc func pageControlDotClicked(page: Int) {
+        setViewControllers([orderedViewControllers[pageControl.currentPage]],
+                           direction: .forward, animated: false, completion: nil)
     }
 
     func pageViewController(_ pageViewController: UIPageViewController, didFinishAnimating finished: Bool,
@@ -204,10 +220,11 @@ extension TakePicture: UIPageViewControllerDelegate {
 
         // add delete image button again
         if let vc = self.orderedViewControllers[self.currentPage] as? CaptureImageVC {
-            if vc.takeImage == nil {
+            if vc.takeImage.isHidden == true {
                 self.addDeleteImageButtonToTabBar()
             }
         }
+        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
     }
 }
 
@@ -241,5 +258,7 @@ extension TakePicture: UIImagePickerControllerDelegate {
         self.currentPage = orderedViewControllers.count - 1
         // present new controller
         setViewControllers([orderedViewControllers.last!], direction: .forward, animated: true, completion: nil)
+        // update page control
+        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
     }
 }

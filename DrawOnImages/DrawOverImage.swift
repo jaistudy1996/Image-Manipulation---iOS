@@ -182,7 +182,6 @@ class DrawOverImage: UIViewController {
      Merge two images together (bacground and foreground)
     */
     private func mergeImage() {
-//        mergeTextFields()
         let format = UIGraphicsImageRendererFormat()
         format.scale = mainImage.contentScaleFactor // to keep the scale factor
         let renderer = UIGraphicsImageRenderer(size: mainImage.frame.size, format: format)
@@ -199,24 +198,12 @@ class DrawOverImage: UIViewController {
     private func addSmallView(loc: CGPoint) {
         let x = loc.x - 20
         let y = loc.y - 20
-        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 44, height: 44)))
+        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 64, height: 44)))
         textfield.delegate = self
         textfield.textColor = textColor
         editsForImage.addSubview(textfield)
         textfield.becomeFirstResponder() // make this first responder in order to show keyboard and let the user type
         currentTextField = textfield // set current to the one being edited
-    }
-
-    private func mergeTextFields() {
-        let renderer = UIGraphicsImageRenderer(size: editsForImage.frame.size)
-
-        let img = renderer.image { ctx in
-            let rectangle = CGRect(x: 0, y: 0, width: mainImage.frame.width, height: mainImage.frame.height)
-            for view in editsForImage.subviews {
-                view.draw(rectangle)
-            }
-        }
-        editsForImage.image = img
     }
 
     @objc func insetTextFieldOnKeyboardAppear(notification: Notification) {

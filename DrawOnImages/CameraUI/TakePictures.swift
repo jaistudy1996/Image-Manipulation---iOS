@@ -13,11 +13,25 @@ class TakePicture: UIPageViewController {
 
     var currentPage: Int = 0
 
-    private lazy var deleteImageButton: UIBarButtonItem = {
-        let deleteBarButton = UIBarButtonItem(image: #imageLiteral(resourceName: "rubbish-bin"), style: .plain, target: self, action: #selector(deleteImage))
-        return deleteBarButton
-    }()
-    
+    @IBOutlet weak var deleteButton: UIBarButtonItem!
+
+    @IBAction func deleteImage(_ sender: UIBarButtonItem) {
+        guard orderedViewControllers.count > 1 else {
+            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
+            capVC?.deleteImage()
+            return
+        }
+        orderedViewControllers.remove(at: self.currentPage)
+        self.currentPage = orderedViewControllers.count - 1 // reset currentpage
+
+        // set current page to last one
+        setViewControllers([orderedViewControllers[self.currentPage]],
+                           direction: .reverse, animated: true, completion: nil)
+
+        // update page control
+        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
+    }
+
     private(set) lazy var orderedViewControllers: [UIViewController] = {
         return [self.newImageCaptureViewController(identifier: "CaptureImageViewController")]
     }()
@@ -37,6 +51,7 @@ class TakePicture: UIPageViewController {
             setViewControllers([firstViewController], direction: .forward, animated: false, completion: nil)
         }
         configurePageControl(currentPageNumber: 0, totalNumberofPages: orderedViewControllers.count)
+        deleteButton.isEnabled = false
     }
     override func didReceiveMemoryWarning() {
         print("Memory warning -- TakePictures")
@@ -110,35 +125,6 @@ class TakePicture: UIPageViewController {
             print("Camera not available")
         }
     }
-
-    func addDeleteImageButtonToTabBar() {
-        if let toolbarItems = toolbarItems,
-            toolbarItems.contains(deleteImageButton) {
-            // do nothing
-        } else {
-            self.toolbarItems?.append(deleteImageButton)
-            let flexibleSpace = UIBarButtonItem(barButtonSystemItem: .flexibleSpace, target: self, action: nil)
-            self.toolbarItems?.append(flexibleSpace)
-        }
-    }
-
-    @objc func deleteImage() {
-        guard orderedViewControllers.count > 1 else {
-            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
-            capVC?.deleteImage()
-            return
-        }
-        orderedViewControllers.remove(at: self.currentPage)
-        self.currentPage = orderedViewControllers.count - 1 // reset currentpage
-
-        // set current page to last one
-        setViewControllers([orderedViewControllers[self.currentPage]],
-                           direction: .reverse, animated: true, completion: nil)
-
-        // update page control
-        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
-    }
-
 }
 
 extension TakePicture: UIPageViewControllerDataSource {
@@ -221,7 +207,8 @@ extension TakePicture: UIPageViewControllerDelegate {
         // add delete image button again
         if let vc = self.orderedViewControllers[self.currentPage] as? CaptureImageVC {
             if vc.takeImage.isHidden == true {
-                self.addDeleteImageButtonToTabBar()
+                // Enable delete button - required only first time
+                deleteButton.isEnabled = true
             }
         }
         configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
@@ -252,6 +239,7 @@ extension TakePicture: UIImagePickerControllerDelegate {
         }
 
         captureController.imageForPreviewImage = capturedImage // set image for new controller
+        deleteButton.isEnabled = true
         picker.dismiss(animated: true, completion: nil)
 
         // update current page

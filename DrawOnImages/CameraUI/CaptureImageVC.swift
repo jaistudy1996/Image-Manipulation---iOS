@@ -99,14 +99,16 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
         for sub in previewImage.subviews {
             sub.removeFromSuperview()
         }
-
-        addRetakeImageButtonToTabBar()
+        if let parent = self.parent as? TakePicture {
+            parent.deleteButton.isEnabled = true
+        }
+        //addRetakeImageButtonToTabBar()
     }
     
-    private func addRetakeImageButtonToTabBar() {
-        let parent  = self.parent as? TakePicture
-        parent?.addDeleteImageButtonToTabBar()
-    }
+//    private func addRetakeImageButtonToTabBar() {
+//        let parent  = self.parent as? TakePicture
+//        parent?.addDeleteImageButtonToTabBar()
+//    }
 
     @objc func reopenCamera() {
         openCamera(UIButton(type: .system))
@@ -144,9 +146,6 @@ extension CaptureImageVC: UITabBarDelegate {
             } else {
                 return
             }
-        }
-        if item.tag == 2 { // retake image
-            openCamera(UIButton(type: .system)) // just a temp button to send to openCamera function
         }
     }
     

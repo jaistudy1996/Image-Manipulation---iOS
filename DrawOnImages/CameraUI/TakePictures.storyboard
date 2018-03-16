@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8We-5F-s78">
-    <device id="retina4_7" orientation="portrait">
+    <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
@@ -16,28 +16,35 @@
                 <pageViewController storyboardIdentifier="CameraPageVIewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="xnb-SP-UyE" customClass="TakePicture" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Mof-6j-rop"/>
                         <barButtonItem title="Edit" image="edit" id="pG9-Ye-Zyk">
                             <connections>
                                 <action selector="editImage:" destination="xnb-SP-UyE" id="gnZ-Yl-udx"/>
                             </connections>
                         </barButtonItem>
                         <barButtonItem style="plain" systemItem="flexibleSpace" id="EwF-iR-4ao"/>
-                        <barButtonItem title="Save" image="save" id="fbv-Js-Gk8">
-                            <connections>
-                                <action selector="saveImage:" destination="xnb-SP-UyE" id="Tdj-X7-s20"/>
-                            </connections>
-                        </barButtonItem>
-                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Jlw-bW-yPp"/>
-                    </toolbarItems>
-                    <navigationItem key="navigationItem" id="2qd-RV-5eJ">
-                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="eWB-fJ-EbC">
+                        <barButtonItem systemItem="camera" id="eWB-fJ-EbC">
                             <connections>
                                 <action selector="addNewPicture:" destination="xnb-SP-UyE" id="efp-4g-cTO"/>
                             </connections>
                         </barButtonItem>
+                        <barButtonItem style="plain" systemItem="flexibleSpace" id="Jlw-bW-yPp"/>
+                        <barButtonItem systemItem="trash" id="Hzd-1h-P2u">
+                            <connections>
+                                <action selector="deleteImage:" destination="xnb-SP-UyE" id="rED-Mz-Ngr"/>
+                            </connections>
+                        </barButtonItem>
+                    </toolbarItems>
+                    <navigationItem key="navigationItem" id="2qd-RV-5eJ">
+                        <barButtonItem key="rightBarButtonItem" systemItem="save" id="fbv-Js-Gk8">
+                            <connections>
+                                <action selector="saveImage:" destination="xnb-SP-UyE" id="Tdj-X7-s20"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
+                    <connections>
+                        <outlet property="deleteButton" destination="Hzd-1h-P2u" id="jrZ-UY-94D"/>
+                    </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8b7-lk-Ddq" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -48,18 +55,18 @@
             <objects>
                 <viewController storyboardIdentifier="CaptureImageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="v0O-vs-Z93" customClass="CaptureImageVC" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qE1-LF-Q9Z">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zcZ-yR-Ls6">
-                                <rect key="frame" x="123.5" y="269.5" width="128" height="128"/>
+                                <rect key="frame" x="96" y="220" width="128" height="128"/>
                                 <state key="normal" image="image-add-button"/>
                                 <connections>
                                     <action selector="openCamera:" destination="v0O-vs-Z93" eventType="touchUpInside" id="qYI-f7-QGd"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="MWi-k3-h9a">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                                <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -98,12 +105,12 @@
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="ddH-3A-GUH">
-                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <toolbar key="toolbar" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="4I2-3L-ZdV">
-                        <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                        <rect key="frame" x="0.0" y="524" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
                     <connections>
@@ -118,6 +125,5 @@
     <resources>
         <image name="edit" width="32" height="32"/>
         <image name="image-add-button" width="128" height="128"/>
-        <image name="save" width="32" height="32"/>
     </resources>
 </document>

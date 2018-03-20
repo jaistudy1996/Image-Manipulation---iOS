@@ -11,38 +11,21 @@ import UIKit
 
 class TakePicture: UIPageViewController {
 
+    // MARK: Properties
     var currentPage: Int = 0
+    var pageControl = UIPageControl()
 
-    @IBOutlet weak var deleteButton: UIBarButtonItem!
-
-    @IBAction func deleteImage(_ sender: UIBarButtonItem) {
-        guard orderedViewControllers.count > 1 else {
-            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
-            capVC?.deleteImage()
-            return
-        }
-        orderedViewControllers.remove(at: self.currentPage)
-        self.currentPage = orderedViewControllers.count - 1 // reset currentpage
-
-        // set current page to last one
-        setViewControllers([orderedViewControllers[self.currentPage]],
-                           direction: .reverse, animated: true, completion: nil)
-
-        // update page control
-        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
-    }
-
+    // MARK: Private properties
     private(set) lazy var orderedViewControllers: [UIViewController] = {
         return [self.newImageCaptureViewController(identifier: "CaptureImageViewController")]
     }()
 
-    private func newImageCaptureViewController(identifier: String) -> UIViewController {
-        return UIStoryboard(name: "TakePictures", bundle: nil) .
-            instantiateViewController(withIdentifier: "CaptureImageViewController")
-    }
+    // MARK: Outlets
+    @IBOutlet weak var deleteButton: UIBarButtonItem!
+    @IBOutlet weak var saveButton: UIBarButtonItem!
+    @IBOutlet weak var editButton: UIBarButtonItem!
 
-    var pageControl = UIPageControl()
-
+    // MARK: Public overrides
     override func viewDidLoad() {
         super.viewDidLoad()
         self.dataSource = self
@@ -52,19 +35,14 @@ class TakePicture: UIPageViewController {
         }
         configurePageControl(currentPageNumber: 0, totalNumberofPages: orderedViewControllers.count)
         deleteButton.isEnabled = false
+        saveButton.isEnabled = false
+        editButton.isEnabled = false
     }
+
     override func didReceiveMemoryWarning() {
         print("Memory warning -- TakePictures")
     }
-    
-    private func createViewController() -> UIViewController? {
-        guard let newVC = self.storyboard?
-                                .instantiateViewController(withIdentifier: "CaptureImageViewController") else {
-            return nil
-        }
-        return newVC
-    }
-    
+
     /**
      Generate view controller when the user swipes and goes on to the next page.
      
@@ -90,6 +68,24 @@ class TakePicture: UIPageViewController {
         }
     }
 
+    // MARK: IBActions
+    @IBAction func deleteImage(_ sender: UIBarButtonItem) {
+        guard orderedViewControllers.count > 1 else {
+            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
+            capVC?.deleteImage()
+            return
+        }
+        orderedViewControllers.remove(at: self.currentPage)
+        self.currentPage = orderedViewControllers.count - 1 // reset currentpage
+
+        // set current page to last one
+        setViewControllers([orderedViewControllers[self.currentPage]],
+                           direction: .reverse, animated: true, completion: nil)
+
+        // update page control
+        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
+    }
+
     @IBAction func editImage(_ sender: UIBarButtonItem) {
         if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
             vc.editImage()
@@ -112,6 +108,7 @@ class TakePicture: UIPageViewController {
         self.openCamera()
     }
 
+    // MARK: Private functions
     private func openCamera() {
         let imagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -125,9 +122,24 @@ class TakePicture: UIPageViewController {
             print("Camera not available")
         }
     }
+
+    private func newImageCaptureViewController(identifier: String) -> UIViewController {
+        return UIStoryboard(name: "TakePictures", bundle: nil) .
+            instantiateViewController(withIdentifier: "CaptureImageViewController")
+    }
+
+    private func createViewController() -> UIViewController? {
+        guard let newVC = self.storyboard?
+            .instantiateViewController(withIdentifier: "CaptureImageViewController") else {
+                return nil
+        }
+        return newVC
+    }
+
 }
 
 extension TakePicture: UIPageViewControllerDataSource {
+
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
         
@@ -153,10 +165,6 @@ extension TakePicture: UIPageViewControllerDataSource {
 
         return orderedViewControllers[nextIndex]
     }
-    
-//    func presentationCount(for pageViewController: UIPageViewController) -> Int {
-//        return orderedViewControllers.count - 1
-//    }
 
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
         guard let vcIndex = orderedViewControllers.index(of: pageViewController) else {
@@ -164,9 +172,11 @@ extension TakePicture: UIPageViewControllerDataSource {
         }
         return vcIndex
     }
+
 }
 
 extension TakePicture: UIPageViewControllerDelegate {
+
     func configurePageControl(currentPageNumber: Int, totalNumberofPages: Int) {
         
         if self.view.subviews.index(of: pageControl) != nil {
@@ -213,6 +223,7 @@ extension TakePicture: UIPageViewControllerDelegate {
         }
         configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
     }
+
 }
 
 extension TakePicture: UINavigationControllerDelegate {
@@ -220,6 +231,8 @@ extension TakePicture: UINavigationControllerDelegate {
 }
 
 extension TakePicture: UIImagePickerControllerDelegate {
+
+    // this delegate funciton is invoked when the user tries to take the second picture
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
 
         guard let newController = createViewController() else {
@@ -238,9 +251,12 @@ extension TakePicture: UIImagePickerControllerDelegate {
             return
         }
 
+        picker.dismiss(animated: true, completion: nil)
+
         captureController.imageForPreviewImage = capturedImage // set image for new controller
         deleteButton.isEnabled = true
-        picker.dismiss(animated: true, completion: nil)
+        saveButton.isEnabled = true
+        editButton.isEnabled = true
 
         // update current page
         self.currentPage = orderedViewControllers.count - 1
@@ -248,5 +264,8 @@ extension TakePicture: UIImagePickerControllerDelegate {
         setViewControllers([orderedViewControllers.last!], direction: .forward, animated: true, completion: nil)
         // update page control
         configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
+
+        editImage(UIBarButtonItem())
     }
+
 }

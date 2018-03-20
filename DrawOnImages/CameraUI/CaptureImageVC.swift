@@ -12,8 +12,13 @@ import UIKit
 
 class CaptureImageVC: UIViewController {
 
-    var imageForPreviewImage: UIImage?
+    // MARK: Outlets
     @IBOutlet weak var previewImage: UIImageView!
+    @IBOutlet weak var takeImage: UIButton!
+
+    // MARK: Properties
+    var imageForPreviewImage: UIImage?
+    private var textEdits = [TextFieldInfo]()   // store all the edits made by the user
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,11 +27,8 @@ class CaptureImageVC: UIViewController {
             setPreviewImage(prevImage)
         }
     }
-    
-    @IBOutlet weak var takeImage: UIButton!
 
-    private var textEdits = [TextFieldInfo]()   // store all the edits made by the user
-    
+    // MARK: Outlet actions
     @IBAction func openCamera(_ sender: UIButton) {
         let imagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
@@ -40,21 +42,13 @@ class CaptureImageVC: UIViewController {
         }
     }
 
+    // MARK: Actions for toolbar buttons
     func editImage() {
         let drawOverImageVC = DrawOverImage.fromStoryboard()
         drawOverImageVC.delgate = self as DrawOverImageDelegate
         drawOverImageVC.imageForMainImage = previewImage.image
         drawOverImageVC.textFieldsInfo = textEdits
         self.present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
-    }
-
-    func saveImage() {
-        if previewImage.image != nil {
-            UIImageWriteToSavedPhotosAlbum(previewImage.image!, self,
-                                           #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
-        } else {
-            return
-        }
     }
 
     func deleteImage() {
@@ -66,12 +60,41 @@ class CaptureImageVC: UIViewController {
             for case let textField as UITextField in previewImage.subviews {
                 textField.removeFromSuperview()
             }
+
+            if let parent = self.parent as? TakePicture {
+                parent.deleteButton.isEnabled = false
+                parent.editButton.isEnabled = false
+                parent.saveButton.isEnabled = false
+            }
+        }
+    }
+
+    func saveImage() {
+        if previewImage.image != nil {
+            UIImageWriteToSavedPhotosAlbum(previewImage.image!, self,
+                                           #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
+        } else {
+            return
+        }
+    }
+
+    @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?,
+                               contextInfo: UnsafeRawPointer) {
+        if error != nil {
+            let alertVC = UIAlertController(title: "Error saving image", message: nil, preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
+            present(alertVC, animated: true, completion: nil)
+        } else {
+            let alertVC = UIAlertController(title: "Image Saved", message: nil, preferredStyle: .alert)
+            alertVC.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
+            present(alertVC, animated: true, completion: nil)
         }
     }
 
 }
 
 extension CaptureImageVC: UIImagePickerControllerDelegate {
+
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
 
         guard let capturedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
@@ -79,7 +102,11 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             return
         }
         setPreviewImage(capturedImage)
-        picker.dismiss(animated: true, completion: nil)
+        picker.dismiss(animated: true) {
+            if let parent = self.parent as? TakePicture {
+                parent.editImage(UIBarButtonItem())
+            }
+        }
     }
     
     private func setPreviewImage(_ imageToDisplay: UIImage) {
@@ -89,7 +116,6 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
 
         if takeImage.isHidden == false {
             takeImage.isHidden = true
-//            takeImage.removeFromSuperview() // remove the take image button after setting the preview image
         }
 
         if imageForPreviewImage != nil {
@@ -99,16 +125,13 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
         for sub in previewImage.subviews {
             sub.removeFromSuperview()
         }
+
         if let parent = self.parent as? TakePicture {
             parent.deleteButton.isEnabled = true
+            parent.editButton.isEnabled = true
+            parent.saveButton.isEnabled = true
         }
-        //addRetakeImageButtonToTabBar()
     }
-    
-//    private func addRetakeImageButtonToTabBar() {
-//        let parent  = self.parent as? TakePicture
-//        parent?.addDeleteImageButtonToTabBar()
-//    }
 
     @objc func reopenCamera() {
         openCamera(UIButton(type: .system))
@@ -123,48 +146,15 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
+
 }
 
 extension CaptureImageVC: UINavigationControllerDelegate {
     
 }
 
-extension CaptureImageVC: UITabBarDelegate {
-    func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-        if item.tag == 0 { // Tag 0 is for editing image
-            let drawOverImageVC = DrawOverImage.fromStoryboard()
-            drawOverImageVC.delgate = self as DrawOverImageDelegate
-            drawOverImageVC.imageForMainImage = previewImage.image
-            drawOverImageVC.textFieldsInfo = textEdits
-//            UINavigationController(rootViewController: drawOverImageVC)
-            self.present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
-        }
-        if item.tag == 1 { // trigger for save image
-            if previewImage.image != nil {
-                UIImageWriteToSavedPhotosAlbum(previewImage.image!, self,
-                                               #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
-            } else {
-                return
-            }
-        }
-    }
-    
-    @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?,
-                               contextInfo: UnsafeRawPointer) {
-        if error != nil {
-            let alertVC = UIAlertController(title: "Error saving image", message: nil, preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-            present(alertVC, animated: true, completion: nil)
-        } else {
-            let alertVC = UIAlertController(title: "Image Saved", message: nil, preferredStyle: .alert)
-            alertVC.addAction(UIAlertAction(title: "Okay", style: .default, handler: nil))
-            present(alertVC, animated: true, completion: nil)
-//            tabBar.selectedItem = nil
-        }
-    }
-}
-
 extension CaptureImageVC: DrawOverImageDelegate {
+
     func doneEditing(image: UIImage, textEdits: [TextFieldInfo]) {
         previewImage.image = image
         addTextFieldsToImage(textEdits: textEdits)

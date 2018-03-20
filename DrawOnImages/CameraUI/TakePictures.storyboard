@@ -44,6 +44,8 @@
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="deleteButton" destination="Hzd-1h-P2u" id="jrZ-UY-94D"/>
+                        <outlet property="editButton" destination="pG9-Ye-Zyk" id="s2E-qU-FJX"/>
+                        <outlet property="saveButton" destination="fbv-Js-Gk8" id="xUh-si-St3"/>
                     </connections>
                 </pageViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8b7-lk-Ddq" userLabel="First Responder" sceneMemberID="firstResponder"/>

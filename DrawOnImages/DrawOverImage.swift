@@ -5,7 +5,6 @@
 //  Created by Jayant Arora on 3/1/18.
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
-// swiftlint:disable trailing_whitespace
 
 import UIKit
 import ColorSlider
@@ -14,41 +13,32 @@ protocol DrawOverImageDelegate: class {
     func doneEditing(image: UIImage, textEdits: [TextFieldInfo])
 }
 
-struct TextFieldInfo {
-    var frame: CGRect
-    var text: String
-    var textColor: UIColor = UIColor.black
-}
-
-extension TextFieldInfo: Hashable {
-    var hashValue: Int {
-        return frame.origin.x.hashValue ^ frame.origin.y.hashValue //&* 16777619
-    }
-
-    static func == (lhs: TextFieldInfo, rhs: TextFieldInfo) -> Bool {
-        return lhs.frame == rhs.frame// && lhs.text == rhs.text
-    }
-}
-
 class DrawOverImage: UIViewController {
 
-    // scroll view
-    @IBOutlet weak var mainScrollView: UIScrollView!
+    // MARK: Properties
 
     // current editing text field
     var currentTextField: UITextField?
 
     // set this variable when instantiating this vc from some other vc
-    weak var imageForMainImage: UIImage!
     lazy var strokeColor: UIColor = UIColor.black
     lazy var textColor: UIColor = UIColor.black
     lazy var iPhoneColorSliderView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    weak var imageForMainImage: UIImage!
     weak var toolBar: UIToolbar!
-    
     weak var delgate: DrawOverImageDelegate?
-    
+    var textFieldsInfo = [TextFieldInfo]()
+    var oldTouchPoint: CGPoint? // the last time when the screen was touch
+
+    // MARK: Outlets
+
+    // scroll view
+    @IBOutlet weak var mainScrollView: UIScrollView!
     @IBOutlet weak var editsForImage: UIImageView!
-    
+    @IBOutlet weak var mainImage: UIImageView!
+
+    // MARK: Actions
+
     @IBAction func doneEditing(_ sender: UIBarButtonItem) {
         
         // Merge two images before exiting view controller
@@ -70,16 +60,7 @@ class DrawOverImage: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    @IBAction func brush(_ sender: UIBarButtonItem) {
-        print("Brush Selected")
-    }
-    
-    @IBOutlet weak var mainImage: UIImageView!
-
-    var textFieldsInfo = [TextFieldInfo]()
-    
-    var oldTouchPoint: CGPoint? // the last time when the screen was touch
-    
+    // MARK: Public Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpImage()
@@ -178,6 +159,8 @@ class DrawOverImage: UIViewController {
 
     }
 
+    // MARK: Image editing utility methods
+
     /**
      Merge two images together (bacground and foreground)
     */
@@ -195,6 +178,7 @@ class DrawOverImage: UIViewController {
         mainImage.image = img
     }
 
+    // Add text fields on touch
     private func addSmallView(loc: CGPoint) {
         let x = loc.x - 20
         let y = loc.y - 20
@@ -222,11 +206,12 @@ class DrawOverImage: UIViewController {
         }), completion: nil)
 
         mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
-
     }
+
 }
 
 extension DrawOverImage: StoryboardInitializable {
+
     static var storyboardName: String {
         return "DrawOverImage"
     }
@@ -234,9 +219,9 @@ extension DrawOverImage: StoryboardInitializable {
     static var storyboardSceneID: String {
         return "DrawOverImage"
     }
+
 }
 
-// swiftlint:disable line_length
 extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 
     @IBAction func colorSelect(_ sender: UIBarButtonItem) {
@@ -251,7 +236,6 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
             let popoverVC = vc.popoverPresentationController
             popoverVC?.permittedArrowDirections = .down
             popoverVC?.delegate = self
-//            popoverVC?.sourceView = tabBarSelectColor
             popoverVC?.sourceView = toolBar
             let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
             colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
@@ -266,10 +250,9 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
                 // remove color slider view just in case it is already on the screeen
                 iPhoneColorSliderView.removeFromSuperview()
             } else {
-
-    //            let tabBarFrame = tabBarSelectColor.frame
                 let toolbarFrame = toolBar.frame
-                let frame = CGRect(x: 10, y: toolbarFrame.origin.y - 100, width: toolbarFrame.width - 40, height: toolbarFrame.height)
+                let frame = CGRect(x: 10, y: toolbarFrame.origin.y - 100,
+                                   width: toolbarFrame.width - 40, height: toolbarFrame.height)
                 iPhoneColorSliderView = UIView(frame: frame)
 
                 // add colorSlider
@@ -287,9 +270,11 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
         strokeColor = colorSlider.color
         textColor = colorSlider.color
     }
+
 }
 
 extension DrawOverImage: UITextFieldDelegate {
+
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         self.view.endEditing(true)
         self.currentTextField = nil // remove any current textfield
@@ -315,4 +300,5 @@ extension DrawOverImage: UITextFieldDelegate {
             textFieldsInfo.append(tempField)
         }
     }
+
 }

@@ -11,7 +11,7 @@
 		3B7B8D8E204D7A550053740B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8D8D204D7A550053740B /* Assets.xcassets */; };
 		3B7B8D91204D7A550053740B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8D8F204D7A550053740B /* LaunchScreen.storyboard */; };
 		3B7B8DA6204D8CA10053740B /* TakePictures.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA3204D8CA10053740B /* TakePictures.storyboard */; };
-		3B7B8DA7204D8CA10053740B /* CaptureImageVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA4204D8CA10053740B /* CaptureImageVC.swift */; };
+		3B7B8DA7204D8CA10053740B /* CaptureImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA4204D8CA10053740B /* CaptureImageViewController.swift */; };
 		3B7B8DA8204D8CA10053740B /* TakePictures.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA5204D8CA10053740B /* TakePictures.swift */; };
 		3B7B8DAC204D9C290053740B /* StoryboardInitializable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DA9204D9C280053740B /* StoryboardInitializable.swift */; };
 		3B7B8DAD204D9C290053740B /* DrawOverImage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B7B8DAA204D9C280053740B /* DrawOverImage.swift */; };
@@ -27,7 +27,7 @@
 		3B7B8D90204D7A550053740B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		3B7B8D92204D7A550053740B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		3B7B8DA3204D8CA10053740B /* TakePictures.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = TakePictures.storyboard; sourceTree = "<group>"; };
-		3B7B8DA4204D8CA10053740B /* CaptureImageVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureImageVC.swift; sourceTree = "<group>"; };
+		3B7B8DA4204D8CA10053740B /* CaptureImageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CaptureImageViewController.swift; sourceTree = "<group>"; };
 		3B7B8DA5204D8CA10053740B /* TakePictures.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TakePictures.swift; sourceTree = "<group>"; };
 		3B7B8DA9204D9C280053740B /* StoryboardInitializable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoryboardInitializable.swift; sourceTree = "<group>"; };
 		3B7B8DAA204D9C280053740B /* DrawOverImage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawOverImage.swift; sourceTree = "<group>"; };
@@ -96,7 +96,7 @@
 		3B7B8D98204D7A760053740B /* CameraUI */ = {
 			isa = PBXGroup;
 			children = (
-				3B7B8DA4204D8CA10053740B /* CaptureImageVC.swift */,
+				3B7B8DA4204D8CA10053740B /* CaptureImageViewController.swift */,
 				3B7B8DA3204D8CA10053740B /* TakePictures.storyboard */,
 				3B7B8DA5204D8CA10053740B /* TakePictures.swift */,
 			);
@@ -257,7 +257,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3B7B8D87204D7A550053740B /* AppDelegate.swift in Sources */,
-				3B7B8DA7204D8CA10053740B /* CaptureImageVC.swift in Sources */,
+				3B7B8DA7204D8CA10053740B /* CaptureImageViewController.swift in Sources */,
 				3B7B8DAC204D9C290053740B /* StoryboardInitializable.swift in Sources */,
 				3B95176A2061AB1D0087CD45 /* TextFieldInfo.swift in Sources */,
 				3B7B8DAD204D9C290053740B /* DrawOverImage.swift in Sources */,

@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8We-5F-s78">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14113" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="8We-5F-s78">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Take Picture-->
+        <!--Take Picture Page View Controller-->
         <scene sceneID="yce-hx-ZCO">
             <objects>
-                <pageViewController storyboardIdentifier="CameraPageVIewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="xnb-SP-UyE" customClass="TakePicture" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
+                <pageViewController storyboardIdentifier="CameraPageVIewController" autoresizesArchivedViewToFullSize="NO" useStoryboardIdentifierAsRestorationIdentifier="YES" transitionStyle="scroll" navigationOrientation="horizontal" spineLocation="none" id="xnb-SP-UyE" customClass="TakePicturePageViewController" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
                     <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems>
                         <barButtonItem title="Edit" image="edit" id="pG9-Ye-Zyk">
@@ -52,10 +52,10 @@
             </objects>
             <point key="canvasLocation" x="1143.2" y="91.304347826086968"/>
         </scene>
-        <!--Capture ImageVC-->
+        <!--Capture Image View Controller-->
         <scene sceneID="cik-tY-qbq">
             <objects>
-                <viewController storyboardIdentifier="CaptureImageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="v0O-vs-Z93" customClass="CaptureImageVC" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="CaptureImageViewController" useStoryboardIdentifierAsRestorationIdentifier="YES" id="v0O-vs-Z93" customClass="CaptureImageViewController" customModule="DrawOnImages" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qE1-LF-Q9Z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

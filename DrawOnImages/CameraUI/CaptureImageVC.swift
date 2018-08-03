@@ -10,7 +10,7 @@
 import Foundation
 import UIKit
 
-class CaptureImageVC: UIViewController {
+class CaptureImageViewController: UIViewController {
 
     // MARK: Outlets
     @IBOutlet weak var previewImage: UIImageView!
@@ -61,7 +61,7 @@ class CaptureImageVC: UIViewController {
                 textField.removeFromSuperview()
             }
 
-            if let parent = self.parent as? TakePicture {
+            if let parent = self.parent as? TakePicturePageViewController {
                 parent.deleteButton.isEnabled = false
                 parent.editButton.isEnabled = false
                 parent.saveButton.isEnabled = false
@@ -93,7 +93,7 @@ class CaptureImageVC: UIViewController {
 
 }
 
-extension CaptureImageVC: UIImagePickerControllerDelegate {
+extension CaptureImageViewController: UIImagePickerControllerDelegate {
 
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
 
@@ -103,7 +103,7 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
         }
         setPreviewImage(capturedImage)
         picker.dismiss(animated: true) {
-            if let parent = self.parent as? TakePicture {
+            if let parent = self.parent as? TakePicturePageViewController {
                 parent.editImage(UIBarButtonItem())
             }
         }
@@ -126,7 +126,7 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
             sub.removeFromSuperview()
         }
 
-        if let parent = self.parent as? TakePicture {
+        if let parent = self.parent as? TakePicturePageViewController {
             parent.deleteButton.isEnabled = true
             parent.editButton.isEnabled = true
             parent.saveButton.isEnabled = true
@@ -149,11 +149,11 @@ extension CaptureImageVC: UIImagePickerControllerDelegate {
 
 }
 
-extension CaptureImageVC: UINavigationControllerDelegate {
+extension CaptureImageViewController: UINavigationControllerDelegate {
     
 }
 
-extension CaptureImageVC: DrawOverImageDelegate {
+extension CaptureImageViewController: DrawOverImageDelegate {
 
     func doneEditing(image: UIImage, textEdits: [TextFieldInfo]) {
         previewImage.image = image

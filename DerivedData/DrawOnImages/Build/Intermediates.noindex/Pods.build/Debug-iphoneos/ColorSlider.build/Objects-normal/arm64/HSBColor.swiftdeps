@@ -1,0 +1,128 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "HSBColor"
+- "=="
+provides-nominal:
+- "11ColorSlider8HSBColorV"
+provides-member:
+- ["11ColorSlider8HSBColorV", ""]
+- ["So7UIColorC", ""]
+- ["So7UIColorC", "init"]
+provides-dynamic-lookup:
+depends-top-level:
+- !private "&&"
+- !private "*"
+- !private "+"
+- !private "-"
+- "=="
+- "AssignmentPrecedence"
+- "Bool"
+- "CGFloat"
+- "Equatable"
+- "FloatLiteralType"
+- "HSBColor"
+- "IntegerLiteralType"
+- "UIColor"
+- !private "abs"
+- !private "min"
+depends-member:
+- !private ["s7CVarArgP", "getHue"]
+- !private ["s7CVarArgP", "init"]
+- !private ["s28CustomDebugStringConvertibleP", "getHue"]
+- !private ["s28CustomDebugStringConvertibleP", "init"]
+- !private ["s23CustomStringConvertibleP", "getHue"]
+- !private ["s23CustomStringConvertibleP", "init"]
+- ["s9EquatableP", "HSBColor"]
+- ["s9EquatableP", ""]
+- !private ["s9EquatableP", "abs"]
+- !private ["s9EquatableP", "brightness"]
+- !private ["s9EquatableP", "getHue"]
+- !private ["s9EquatableP", "hue"]
+- ["s9EquatableP", "init"]
+- !private ["s9EquatableP", "min"]
+- !private ["s9EquatableP", "saturation"]
+- ["11ColorSlider8HSBColorV", "=="]
+- ["11ColorSlider8HSBColorV", "Bool"]
+- ["11ColorSlider8HSBColorV", "CGFloat"]
+- ["11ColorSlider8HSBColorV", "HSBColor"]
+- ["11ColorSlider8HSBColorV", "UIColor"]
+- !private ["11ColorSlider8HSBColorV", "abs"]
+- ["11ColorSlider8HSBColorV", "between"]
+- ["11ColorSlider8HSBColorV", "black"]
+- ["11ColorSlider8HSBColorV", "brightness"]
+- ["11ColorSlider8HSBColorV", "deinit"]
+- ["11ColorSlider8HSBColorV", "hue"]
+- ["11ColorSlider8HSBColorV", "init"]
+- ["11ColorSlider8HSBColorV", "isGrayscale"]
+- !private ["11ColorSlider8HSBColorV", "min"]
+- ["11ColorSlider8HSBColorV", "saturation"]
+- ["11ColorSlider8HSBColorV", "white"]
+- !private ["s8HashableP", "getHue"]
+- !private ["s8HashableP", "init"]
+- !private ["So8NSCodingP", "getHue"]
+- !private ["So8NSCodingP", "init"]
+- !private ["So9NSCopyingP", "getHue"]
+- !private ["So9NSCopyingP", "init"]
+- !private ["So21NSItemProviderReadingP", "getHue"]
+- !private ["So21NSItemProviderReadingP", "init"]
+- !private ["So21NSItemProviderWritingP", "getHue"]
+- !private ["So21NSItemProviderWritingP", "init"]
+- ["So8NSObjectC", "HSBColor"]
+- !private ["So8NSObjectC", "getHue"]
+- ["So8NSObjectC", "init"]
+- !private ["So16NSObjectProtocolP", "getHue"]
+- !private ["So16NSObjectProtocolP", "init"]
+- !private ["So14NSSecureCodingP", "getHue"]
+- !private ["So14NSSecureCodingP", "init"]
+- ["So7UIColorC", "HSBColor"]
+- !private ["So7UIColorC", "getHue"]
+- ["So7UIColorC", "init"]
+- !private ["s26_ExpressibleByColorLiteralP", "getHue"]
+- !private ["s26_ExpressibleByColorLiteralP", "init"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "getHue"]
+- !private ["10Foundation27_KeyValueCodingAndObservingP", "init"]
+depends-nominal:
+- !private "s7CVarArgP"
+- !private "s28CustomDebugStringConvertibleP"
+- !private "s23CustomStringConvertibleP"
+- "s9EquatableP"
+- "11ColorSlider8HSBColorV"
+- !private "s8HashableP"
+- !private "So8NSCodingP"
+- !private "So9NSCopyingP"
+- !private "So21NSItemProviderReadingP"
+- !private "So21NSItemProviderWritingP"
+- "So8NSObjectC"
+- !private "So16NSObjectProtocolP"
+- !private "So14NSSecureCodingP"
+- "So7UIColorC"
+- !private "s26_ExpressibleByColorLiteralP"
+- !private "10Foundation27_KeyValueCodingAndObservingP"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.apinotesc"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Metal.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreFoundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/SwiftOnoneSupport.swiftmodule"
+- "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/Pods/Target Support Files/ColorSlider/ColorSlider-umbrella.h"
+- "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DerivedData/DrawOnImages/Build/Intermediates.noindex/Pods.build/Debug-iphoneos/ColorSlider.build/unextended-module.modulemap"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/usr/include/objc/ObjectiveC.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/OpenGLES.framework/Headers/OpenGLES.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/CoreImage.framework/Headers/CoreImage.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/QuartzCore.framework/Headers/QuartzCore.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/Metal.framework/Headers/Metal.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/usr/include/Darwin.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/Foundation.framework/Headers/Foundation.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/CoreGraphics.framework/Headers/CoreGraphics.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/UIKit.framework/Headers/UIKit.apinotes"
+- "/Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS11.4.sdk/System/Library/Frameworks/CoreText.framework/Headers/CoreText.apinotes"
+interface-hash: "7f9359612591fd10871e66bbb3a2abb5"

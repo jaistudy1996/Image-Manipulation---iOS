@@ -52,11 +52,6 @@ class DrawOverImage: UIViewController {
             return
         }
         delgate?.doneEditing(image: imageForDelegate, textEdits: textFieldsInfo)
-
-        // remove observers
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
-
         dismiss(animated: true, completion: nil)
     }
     
@@ -66,24 +61,17 @@ class DrawOverImage: UIViewController {
         setUpImage()
         self.toolBar = self.navigationController?.toolbar
         self.navigationController?.setToolbarHidden(false, animated: true)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear),
-                                               name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-
-        NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide),
-                                               name: NSNotification.Name.UIKeyboardDidHide, object: nil)
+        startObservingNotifications()
     }
 
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        print("Memory Warning -- DrawOverImageView")
+    deinit {
+        stopObservingNotifications()
     }
 
     // MARK: Setup Initial image
-    /**
-     Set up background image to be merged when the edits are complete
-     Also add text sub views if they exist
-    */
+
+    /// Set up background image to be merged when the edits are complete
+    /// Also add text sub views if they exist
     private func setUpImage() {
         mainImage.image = imageForMainImage
 
@@ -114,63 +102,53 @@ class DrawOverImage: UIViewController {
             iPhoneColorSliderView.removeFromSuperview() // remove color selector when user starts swiping on the screen
         }
         let currentTouchLoc = gesture.location(in: editsForImage)
-        
-        if gesture.state == .began {
+
+        switch gesture.state {
+        case .began:
             oldTouchPoint = currentTouchLoc
-        }
-        
-        if gesture.state != .ended {
+        case .ended:
             if oldTouchPoint != nil {
                 drawLine(from: oldTouchPoint!, to: currentTouchLoc)
             }
+        default:
+            break
         }
-        
         oldTouchPoint = currentTouchLoc
     }
     
     // MARK: Draw line between two vertcies
-    /**
-     Connect two points using a line
-     
-     - parameters:
-        - from: The starting point for line to be draw
-     n        - to: The ending point for line to be drawn
-    */
+
+    /// Connect two points using a line
+    ///
+    /// - Parameters:
+    ///   - from: The starting point for line to be draw
+    ///   - toPoint: The ending point for line to be drawn
     private func drawLine(from: CGPoint, to toPoint: CGPoint) {
         let size = editsForImage.frame.size
-        
         // Start new image context
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-
         let context = UIGraphicsGetCurrentContext()
         editsForImage.image?.draw(at: CGPoint(x: 0, y: 0))
-
         context?.setLineWidth(2)
         context?.setStrokeColor(strokeColor.cgColor)
         context?.setLineCap(.round)
-
         context?.move(to: from)
         context?.addLine(to: toPoint)
         context?.strokePath()
-
         editsForImage.image = UIGraphicsGetImageFromCurrentImageContext()
-
         UIGraphicsEndImageContext()
-
     }
 
     // MARK: Image editing utility methods
 
-    /**
-     Merge two images together (bacground and foreground)
-    */
+    /// Merge two images together (bacground and foreground)
     private func mergeImage() {
         let format = UIGraphicsImageRendererFormat()
         format.scale = mainImage.contentScaleFactor // to keep the scale factor
-        let renderer = UIGraphicsImageRenderer(size: mainImage.frame.size, format: format)
+        let renderer = UIGraphicsImageRenderer(size: mainImage.bounds.size, format: format)
         
         let img = renderer.image { ctx in
-            let rectangle = CGRect(x: 0, y: 0, width: mainImage.frame.width, height: mainImage.frame.height)
+            let rectangle = CGRect(x: 0, y: 0, width: mainImage.bounds.width, height: mainImage.bounds.height)
             ctx.cgContext.addRect(rectangle)
             mainImage.image?.draw(in: rectangle)
             editsForImage.image?.draw(in: rectangle)
@@ -178,11 +156,12 @@ class DrawOverImage: UIViewController {
         mainImage.image = img
     }
 
-    // Add text fields on touch
+    /// Add text fields on touch
     private func addSmallView(loc: CGPoint) {
-        let x = loc.x - 20
-        let y = loc.y - 20
-        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: x, y: y), size: CGSize(width: 64, height: 44)))
+        let xCord = loc.x - 20
+        let yCord = loc.y - 20
+        let textfield = UITextField(frame: CGRect(origin: CGPoint(x: xCord, y: yCord),
+                                                  size: CGSize(width: 64, height: 44)))
         textfield.delegate = self
         textfield.textColor = textColor
         editsForImage.addSubview(textfield)
@@ -200,7 +179,6 @@ class DrawOverImage: UIViewController {
     }
 
     @objc func resetScrolledViewOnKeyboardHide(notification: Notification) {
-
         UIView.animate(withDuration: 0.2, animations: ({
             self.mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         }), completion: nil)
@@ -208,16 +186,17 @@ class DrawOverImage: UIViewController {
         mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
     }
 
-}
-
-extension DrawOverImage: StoryboardInitializable {
-
-    static var storyboardName: String {
-        return "DrawOverImage"
+    // MARK: Notifications
+    private func startObservingNotifications() {
+        NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear),
+                                               name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide),
+                                               name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
-    
-    static var storyboardSceneID: String {
-        return "DrawOverImage"
+
+    private func stopObservingNotifications() {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
 }
@@ -228,20 +207,20 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
         print("Change color selected")
         // the device is an iPad
         if UIDevice.current.userInterfaceIdiom == .pad {
-            guard let vc = self.storyboard?.instantiateViewController(withIdentifier: "ChangeColor") else {
+            guard let changeColorvc = self.storyboard?.instantiateViewController(withIdentifier: "ChangeColor") else {
                 return
             }
-            vc.modalPresentationStyle = .popover
-            vc.preferredContentSize = CGSize(width: 220, height: 90)
-            let popoverVC = vc.popoverPresentationController
+            changeColorvc.modalPresentationStyle = .popover
+            changeColorvc.preferredContentSize = CGSize(width: 220, height: 90)
+            let popoverVC = changeColorvc.popoverPresentationController
             popoverVC?.permittedArrowDirections = .down
             popoverVC?.delegate = self
             popoverVC?.sourceView = toolBar
             let colorSlider = ColorSlider(orientation: .horizontal, previewSide: .top)
             colorSlider.addTarget(self, action: #selector(changeDrawLineColor(_:)), for: .valueChanged)
             colorSlider.frame = CGRect(x: 10, y: 70, width: 200, height: 20)
-            vc.view.addSubview(colorSlider)
-            present(vc, animated: true, completion: nil)
+            changeColorvc.view.addSubview(colorSlider)
+            present(changeColorvc, animated: true, completion: nil)
         }
 
         // if the device is an iPhone
@@ -266,7 +245,7 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
         }
     }
 
-    @objc func changeDrawLineColor(_ colorSlider: ColorSlider) {
+    @objc private func changeDrawLineColor(_ colorSlider: ColorSlider) {
         strokeColor = colorSlider.color
         textColor = colorSlider.color
     }
@@ -276,8 +255,8 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
 extension DrawOverImage: UITextFieldDelegate {
 
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        self.view.endEditing(true)
-        self.currentTextField = nil // remove any current textfield
+        view.endEditing(true)
+        currentTextField = nil // remove any current textfield
         return true
     }
 
@@ -299,6 +278,18 @@ extension DrawOverImage: UITextFieldDelegate {
         } else {
             textFieldsInfo.append(tempField)
         }
+    }
+
+}
+
+extension DrawOverImage: StoryboardInitializable {
+
+    static var storyboardName: String {
+        return "DrawOverImage"
+    }
+
+    static var storyboardSceneID: String {
+        return "DrawOverImage"
     }
 
 }

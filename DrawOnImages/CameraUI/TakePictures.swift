@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 
-class TakePicture: UIPageViewController {
+class TakePicturePageViewController: UIPageViewController {
 
     // MARK: Properties
     var currentPage: Int = 0
@@ -17,7 +17,7 @@ class TakePicture: UIPageViewController {
 
     // MARK: Private properties
     private(set) lazy var orderedViewControllers: [UIViewController] = {
-        return [self.newImageCaptureViewController(identifier: "CaptureImageViewController")]
+        return [CaptureImageViewController.fromStoryboard()]
     }()
 
     // MARK: Outlets
@@ -25,11 +25,11 @@ class TakePicture: UIPageViewController {
     @IBOutlet weak var saveButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
 
-    // MARK: Public overrides
+    // MARK: View Lifecycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.dataSource = self
-        self.delegate = self
+        dataSource = self
+        delegate = self
         if let firstViewController = orderedViewControllers.first {
             setViewControllers([firstViewController], direction: .forward, animated: false, completion: nil)
         }
@@ -39,39 +39,11 @@ class TakePicture: UIPageViewController {
         editButton.isEnabled = false
     }
 
-    override func didReceiveMemoryWarning() {
-        print("Memory warning -- TakePictures")
-    }
-
-    /**
-     Generate view controller when the user swipes and goes on to the next page.
-     
-     - returns: Index of added View Controller in the stack on arrays
-     
-     Will create a new view controller if total available are upto 5 in memory..
-     otherwise will resuse an previously generated view controller
-     
-     - Important: Not yet used in code
-    */
-    private func generateNewVConSwipe() -> Int? {
-        if orderedViewControllers.count <= 5 {
-            let generatedViewIndex = orderedViewControllers.count
-            // Make a new view controller and add it to orderedViewController
-            guard let newController = createViewController() else {
-                return nil
-            }
-            orderedViewControllers.append(newController)
-            return generatedViewIndex
-        } else {
-            // Reuse one of the previously generated view controllers
-            return 1 // TODO: work on this func
-        }
-    }
-
     // MARK: IBActions
+
     @IBAction func deleteImage(_ sender: UIBarButtonItem) {
         guard orderedViewControllers.count > 1 else {
-            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageVC
+            let capVC = orderedViewControllers[self.currentPage] as? CaptureImageViewController
             capVC?.deleteImage()
             return
         }
@@ -87,13 +59,13 @@ class TakePicture: UIPageViewController {
     }
 
     @IBAction func editImage(_ sender: UIBarButtonItem) {
-        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
+        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageViewController {
             vc.editImage()
         }
     }
 
     @IBAction func saveImage(_ sender: UIBarButtonItem) {
-        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageVC {
+        if let vc = orderedViewControllers[self.currentPage] as? CaptureImageViewController {
             vc.saveImage()
         }
     }
@@ -101,11 +73,11 @@ class TakePicture: UIPageViewController {
     @IBAction func addNewPicture(_ sender: UIBarButtonItem) {
         // open camera to take a new picture
         // must be a new controller otherwise the first view will not be used
-        guard (orderedViewControllers[currentPage] as? CaptureImageVC)?.previewImage.image != nil else {
-            (orderedViewControllers.first as? CaptureImageVC)?.openCamera(UIButton()) // just to invoke the method
+        guard (orderedViewControllers[currentPage] as? CaptureImageViewController)?.previewImage.image != nil else {
+            (orderedViewControllers.first as? CaptureImageViewController)?.openCamera(UIButton()) // just to invoke the method
             return
         }
-        self.openCamera()
+        openCamera()
     }
 
     // MARK: Private functions
@@ -113,32 +85,26 @@ class TakePicture: UIPageViewController {
         let imagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePickerController.sourceType = .camera
-            imagePickerController.delegate = self as UIImagePickerControllerDelegate & UINavigationControllerDelegate
-
+            imagePickerController.delegate = self
             self.present(imagePickerController, animated: true, completion: nil)
         } else {
-            //showNoCameraAvailableAlert()
-            // TODO: create a file with all these utility functions
+            showNoCameraAlert()
             print("Camera not available")
         }
     }
 
-    private func newImageCaptureViewController(identifier: String) -> UIViewController {
-        return UIStoryboard(name: "TakePictures", bundle: nil) .
-            instantiateViewController(withIdentifier: "CaptureImageViewController")
-    }
-
-    private func createViewController() -> UIViewController? {
-        guard let newVC = self.storyboard?
-            .instantiateViewController(withIdentifier: "CaptureImageViewController") else {
-                return nil
-        }
-        return newVC
+    private func showNoCameraAlert() {
+        let alertView = UIAlertController(title: "No Camera Available",
+                                          message: "Camera permissions are needed for this application to work",
+                                          preferredStyle: .alert)
+        let alertAction = UIAlertAction(title: "dismiss", style: .cancel, handler: nil)
+        alertView.addAction(alertAction)
     }
 
 }
 
-extension TakePicture: UIPageViewControllerDataSource {
+// MARK: PageViewController DataSource
+extension TakePicturePageViewController: UIPageViewControllerDataSource {
 
     func pageViewController(_ pageViewController: UIPageViewController,
                             viewControllerBefore viewController: UIViewController) -> UIViewController? {
@@ -146,9 +112,9 @@ extension TakePicture: UIPageViewControllerDataSource {
         guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
 
         let prevIndex = viewControllerIndex - 1
-        guard prevIndex >= 0 else { return nil }
-        
-        guard orderedViewControllers.count > prevIndex else { return nil }
+        guard prevIndex >= 0,
+            orderedViewControllers.count > prevIndex
+        else { return nil }
 
         return orderedViewControllers[prevIndex]
     }
@@ -159,23 +125,20 @@ extension TakePicture: UIPageViewControllerDataSource {
         guard let viewControllerIndex = orderedViewControllers.index(of: viewController) else { return nil }
         
         let nextIndex = viewControllerIndex + 1
-        guard nextIndex != orderedViewControllers.count else { return nil }
-
-        guard orderedViewControllers.count > nextIndex else { return nil }
+        guard nextIndex != orderedViewControllers.count,
+            orderedViewControllers.count > nextIndex
+            else { return nil }
 
         return orderedViewControllers[nextIndex]
     }
 
     func presentationIndex(for pageViewController: UIPageViewController) -> Int {
-        guard let vcIndex = orderedViewControllers.index(of: pageViewController) else {
-            return 0
-        }
-        return vcIndex
+        return orderedViewControllers.index(of: pageViewController) ?? 0
     }
 
 }
 
-extension TakePicture: UIPageViewControllerDelegate {
+extension TakePicturePageViewController: UIPageViewControllerDelegate {
 
     func configurePageControl(currentPageNumber: Int, totalNumberofPages: Int) {
         
@@ -185,8 +148,8 @@ extension TakePicture: UIPageViewControllerDelegate {
         }
         
         // y value is set to starting point of tool bar - height of tool bar
-        let y = CGFloat((self.navigationController?.toolbar.frame.origin.y)! - 90)
-        pageControl = UIPageControl(frame: CGRect(x: 0, y: y,
+        let yCord = CGFloat((self.navigationController?.toolbar.frame.origin.y)! - 90)
+        pageControl = UIPageControl(frame: CGRect(x: 0, y: yCord,
                                                   width: UIScreen.main.bounds.width, height: 30))
         pageControl.numberOfPages = totalNumberofPages
 
@@ -215,7 +178,7 @@ extension TakePicture: UIPageViewControllerDelegate {
         self.pageControl.currentPage = self.currentPage
 
         // add delete image button again
-        if let vc = self.orderedViewControllers[self.currentPage] as? CaptureImageVC {
+        if let vc = self.orderedViewControllers[self.currentPage] as? CaptureImageViewController {
             if vc.takeImage.isHidden == true {
                 // Enable delete button - required only first time
                 deleteButton.isEnabled = true
@@ -226,25 +189,17 @@ extension TakePicture: UIPageViewControllerDelegate {
 
 }
 
-extension TakePicture: UINavigationControllerDelegate {
+extension TakePicturePageViewController: UINavigationControllerDelegate {
     // for imagepickerveiewdelegate only
 }
 
-extension TakePicture: UIImagePickerControllerDelegate {
+extension TakePicturePageViewController: UIImagePickerControllerDelegate {
 
     // this delegate funciton is invoked when the user tries to take the second picture
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
 
-        guard let newController = createViewController() else {
-            let alert = UIAlertController(title: "Error", message: "Cannot add new Image!", preferredStyle: .alert)
-            alert.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
-            return
-        }
-        orderedViewControllers.append(newController)
-
-        guard let captureController = newController as? CaptureImageVC else {
-            return
-        }
+        let captureController = CaptureImageViewController.fromStoryboard()
+        orderedViewControllers.append(captureController)
 
         guard let capturedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
             picker.dismiss(animated: true, completion: nil)
@@ -259,13 +214,38 @@ extension TakePicture: UIImagePickerControllerDelegate {
         editButton.isEnabled = true
 
         // update current page
-        self.currentPage = orderedViewControllers.count - 1
+        currentPage = orderedViewControllers.count - 1
         // present new controller
         setViewControllers([orderedViewControllers.last!], direction: .forward, animated: true, completion: nil)
         // update page control
-        configurePageControl(currentPageNumber: self.currentPage, totalNumberofPages: orderedViewControllers.count)
+        configurePageControl(currentPageNumber: currentPage, totalNumberofPages: orderedViewControllers.count)
 
         editImage(UIBarButtonItem())
     }
 
 }
+
+///**
+// Generate view controller when the user swipes and goes on to the next page.
+//
+// - returns: Index of added View Controller in the stack on arrays
+//
+// Will create a new view controller if total available are upto 5 in memory..
+// otherwise will resuse an previously generated view controller
+//
+// - Important: Not yet used in code
+// */
+//private func generateNewVConSwipe() -> Int? {
+//    if orderedViewControllers.count <= 5 {
+//        let generatedViewIndex = orderedViewControllers.count
+//        // Make a new view controller and add it to orderedViewController
+//        guard let newController = createViewController() else {
+//            return nil
+//        }
+//        orderedViewControllers.append(newController)
+//        return generatedViewIndex
+//    } else {
+//        // Reuse one of the previously generated view controllers
+//        return 1 // TODO: work on this func
+//    }
+//}

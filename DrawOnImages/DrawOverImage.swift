@@ -6,15 +6,14 @@
 //  Copyright © 2018 Jayant Arora. All rights reserved.
 //
 
-import UIKit
 import ColorSlider
+import UIKit
 
 protocol DrawOverImageDelegate: class {
     func doneEditing(image: UIImage, textEdits: [TextFieldInfo])
 }
 
 class DrawOverImage: UIViewController {
-
     // MARK: Properties
 
     // current editing text field
@@ -33,14 +32,13 @@ class DrawOverImage: UIViewController {
     // MARK: Outlets
 
     // scroll view
-    @IBOutlet weak var mainScrollView: UIScrollView!
-    @IBOutlet weak var editsForImage: UIImageView!
-    @IBOutlet weak var mainImage: UIImageView!
+    @IBOutlet var mainScrollView: UIScrollView!
+    @IBOutlet var editsForImage: UIImageView!
+    @IBOutlet var mainImage: UIImageView!
 
     // MARK: Actions
 
-    @IBAction func doneEditing(_ sender: UIBarButtonItem) {
-        
+    @IBAction func doneEditing(_: UIBarButtonItem) {
         // Merge two images before exiting view controller
         // only merge if there is a background image
         if mainImage.image != nil {
@@ -54,13 +52,14 @@ class DrawOverImage: UIViewController {
         delgate?.doneEditing(image: imageForDelegate, textEdits: textFieldsInfo)
         dismiss(animated: true, completion: nil)
     }
-    
+
     // MARK: Public Methods
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpImage()
-        self.toolBar = self.navigationController?.toolbar
-        self.navigationController?.setToolbarHidden(false, animated: true)
+        toolBar = navigationController?.toolbar
+        navigationController?.setToolbarHidden(false, animated: true)
         startObservingNotifications()
     }
 
@@ -82,10 +81,10 @@ class DrawOverImage: UIViewController {
             textfield.textColor = textEdit.textColor
             editsForImage.addSubview(textfield)
         }
-
     }
-    
+
     // MARK: Setup touch gestures
+
     @IBAction func tapGesture(_ gesture: UITapGestureRecognizer) {
         if gesture.state == .recognized {
             // remove selection from tab bar when the user starts to scribble.
@@ -96,7 +95,7 @@ class DrawOverImage: UIViewController {
             addSmallView(loc: gesture.location(in: editsForImage))
         }
     }
-    
+
     @IBAction func panGesture(_ gesture: UIPanGestureRecognizer) {
         if UIDevice.current.userInterfaceIdiom == .phone {
             iPhoneColorSliderView.removeFromSuperview() // remove color selector when user starts swiping on the screen
@@ -115,7 +114,7 @@ class DrawOverImage: UIViewController {
         }
         oldTouchPoint = currentTouchLoc
     }
-    
+
     // MARK: Draw line between two vertcies
 
     /// Connect two points using a line
@@ -146,7 +145,7 @@ class DrawOverImage: UIViewController {
         let format = UIGraphicsImageRendererFormat()
         format.scale = mainImage.contentScaleFactor // to keep the scale factor
         let renderer = UIGraphicsImageRenderer(size: mainImage.bounds.size, format: format)
-        
+
         let img = renderer.image { ctx in
             let rectangle = CGRect(x: 0, y: 0, width: mainImage.bounds.width, height: mainImage.bounds.height)
             ctx.cgContext.addRect(rectangle)
@@ -178,19 +177,20 @@ class DrawOverImage: UIViewController {
         }
     }
 
-    @objc func resetScrolledViewOnKeyboardHide(notification: Notification) {
-        UIView.animate(withDuration: 0.2, animations: ({
+    @objc func resetScrolledViewOnKeyboardHide(notification _: Notification) {
+        UIView.animate(withDuration: 0.2, animations: {
             self.mainScrollView.contentInset = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        }), completion: nil)
+        }, completion: nil)
 
         mainScrollView.scrollRectToVisible(mainScrollView.frame, animated: true)
     }
 
     // MARK: Notifications
+
     private func startObservingNotifications() {
-        NotificationCenter.default.addObserver(self, selector: #selector(self.insetTextFieldOnKeyboardAppear),
+        NotificationCenter.default.addObserver(self, selector: #selector(insetTextFieldOnKeyboardAppear),
                                                name: NSNotification.Name.UIKeyboardDidShow, object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(self.resetScrolledViewOnKeyboardHide),
+        NotificationCenter.default.addObserver(self, selector: #selector(resetScrolledViewOnKeyboardHide),
                                                name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
 
@@ -198,12 +198,10 @@ class DrawOverImage: UIViewController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidShow, object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardDidHide, object: nil)
     }
-
 }
 
 extension DrawOverImage: UIPopoverPresentationControllerDelegate {
-
-    @IBAction func colorSelect(_ sender: UIBarButtonItem) {
+    @IBAction func colorSelect(_: UIBarButtonItem) {
         print("Change color selected")
         // the device is an iPad
         if UIDevice.current.userInterfaceIdiom == .pad {
@@ -240,7 +238,7 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
                 colorSlider.frame = CGRect(x: 10, y: 0, width: iPhoneColorSliderView.frame.width, height: 20)
                 iPhoneColorSliderView.tag = 3 // Tag 3 is for the colorslider view.
                 iPhoneColorSliderView.addSubview(colorSlider)
-                self.view.addSubview(iPhoneColorSliderView)
+                view.addSubview(iPhoneColorSliderView)
             }
         }
     }
@@ -249,19 +247,17 @@ extension DrawOverImage: UIPopoverPresentationControllerDelegate {
         strokeColor = colorSlider.color
         textColor = colorSlider.color
     }
-
 }
 
 extension DrawOverImage: UITextFieldDelegate {
-
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+    func textFieldShouldReturn(_: UITextField) -> Bool {
         view.endEditing(true)
         currentTextField = nil // remove any current textfield
         return true
     }
 
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
-        let tempField = TextFieldInfo(frame: textField.frame, text: textField.text!, textColor: self.textColor)
+    func textFieldDidEndEditing(_ textField: UITextField, reason _: UITextFieldDidEndEditingReason) {
+        let tempField = TextFieldInfo(frame: textField.frame, text: textField.text!, textColor: textColor)
         if let index = textFieldsInfo.index(of: tempField) {
             print("Index at: \(index)")
             if let newText = textField.text {
@@ -279,11 +275,9 @@ extension DrawOverImage: UITextFieldDelegate {
             textFieldsInfo.append(tempField)
         }
     }
-
 }
 
 extension DrawOverImage: StoryboardInitializable {
-
     static var storyboardName: String {
         return "DrawOverImage"
     }
@@ -291,5 +285,4 @@ extension DrawOverImage: StoryboardInitializable {
     static var storyboardSceneID: String {
         return "DrawOverImage"
     }
-
 }

@@ -17,10 +17,10 @@ struct TextFieldInfo {
 
 extension TextFieldInfo: Hashable {
     var hashValue: Int {
-        return frame.origin.x.hashValue ^ frame.origin.y.hashValue //&* 16777619
+        return frame.origin.x.hashValue ^ frame.origin.y.hashValue // &* 16777619
     }
 
     static func == (lhs: TextFieldInfo, rhs: TextFieldInfo) -> Bool {
-        return lhs.frame == rhs.frame// && lhs.text == rhs.text
+        return lhs.frame == rhs.frame // && lhs.text == rhs.text
     }
 }

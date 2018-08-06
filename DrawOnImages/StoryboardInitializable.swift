@@ -14,29 +14,26 @@ import UIKit
 
 @objc
 protocol StoryboardInitializable: class {
-    
     static var storyboardName: String { get }
     static var storyboardSceneID: String { get }
-    
 }
 
 // MARK: - Default Implementation
 
 extension StoryboardInitializable where Self: UIViewController {
-    
     static func fromStoryboard() -> Self {
         guard let viewController = containingStoryboard?
-                                            .instantiateViewController(withIdentifier: storyboardSceneID) as? Self
-            else { fatalError(
-                "Something went wrong. Check to make sure the parameters are what you expect:\n\t" +
-                    "storyboardName: \(storyboardName)\n\t" +
-                "storyboardID: \(storyboardSceneID)\n\t")
+            .instantiateViewController(withIdentifier: storyboardSceneID) as? Self
+        else { fatalError(
+            "Something went wrong. Check to make sure the parameters are what you expect:\n\t" +
+                "storyboardName: \(storyboardName)\n\t" +
+                "storyboardID: \(storyboardSceneID)\n\t"
+        )
         }
         return viewController
     }
-    
+
     private static var containingStoryboard: UIStoryboard? {
         return UIStoryboard(name: storyboardName, bundle: nil)
     }
-    
 }

@@ -11,14 +11,15 @@ import Foundation
 import UIKit
 
 class CaptureImageViewController: UIViewController {
-
     // MARK: Outlets
-    @IBOutlet weak var previewImage: UIImageView!
-    @IBOutlet weak var takeImage: UIButton!
+
+    @IBOutlet var previewImage: UIImageView!
+    @IBOutlet var takeImage: UIButton!
 
     // MARK: Properties
+
     var imageForPreviewImage: UIImage?
-    private var textEdits = [TextFieldInfo]()   // store all the edits made by the user
+    private var textEdits = [TextFieldInfo]() // store all the edits made by the user
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,13 +30,14 @@ class CaptureImageViewController: UIViewController {
     }
 
     // MARK: Outlet actions
-    @IBAction func openCamera(_ sender: UIButton) {
+
+    @IBAction func openCamera(_: UIButton) {
         let imagePickerController = UIImagePickerController()
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePickerController.sourceType = .camera
             imagePickerController.delegate = self
-            
-            self.present(imagePickerController, animated: true, completion: nil)
+
+            present(imagePickerController, animated: true, completion: nil)
         } else {
             showNoCameraAvailableAlert()
             print("Camera not available")
@@ -43,12 +45,13 @@ class CaptureImageViewController: UIViewController {
     }
 
     // MARK: Actions for toolbar buttons
+
     func editImage() {
         let drawOverImageVC = DrawOverImage.fromStoryboard()
         drawOverImageVC.delgate = self as DrawOverImageDelegate
         drawOverImageVC.imageForMainImage = previewImage.image
         drawOverImageVC.textFieldsInfo = textEdits
-        self.present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
+        present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
     }
 
     func deleteImage() {
@@ -78,8 +81,8 @@ class CaptureImageViewController: UIViewController {
         }
     }
 
-    @objc func alertImageSaved(_ image: UIImage, didFinishSavingWithError error: NSError?,
-                               contextInfo: UnsafeRawPointer) {
+    @objc func alertImageSaved(_: UIImage, didFinishSavingWithError error: NSError?,
+                               contextInfo _: UnsafeRawPointer) {
         if error != nil {
             let alertVC = UIAlertController(title: "Error saving image", message: nil, preferredStyle: .alert)
             alertVC.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
@@ -90,13 +93,10 @@ class CaptureImageViewController: UIViewController {
             present(alertVC, animated: true, completion: nil)
         }
     }
-
 }
 
 extension CaptureImageViewController: UIImagePickerControllerDelegate {
-
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String: Any]) {
-
         guard let capturedImage = info[UIImagePickerControllerOriginalImage] as? UIImage else {
             picker.dismiss(animated: true, completion: nil)
             return
@@ -108,7 +108,7 @@ extension CaptureImageViewController: UIImagePickerControllerDelegate {
             }
         }
     }
-    
+
     private func setPreviewImage(_ imageToDisplay: UIImage) {
         previewImage.image = imageToDisplay
 
@@ -142,19 +142,16 @@ extension CaptureImageViewController: UIImagePickerControllerDelegate {
         alertController.addAction(UIAlertAction(title: "Dismiss", style: .cancel, handler: nil))
         self.present(alertController, animated: true, completion: nil)
     }
-    
+
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         picker.dismiss(animated: true, completion: nil)
     }
-
 }
 
 extension CaptureImageViewController: UINavigationControllerDelegate {
-    
 }
 
 extension CaptureImageViewController: DrawOverImageDelegate {
-
     func doneEditing(image: UIImage, textEdits: [TextFieldInfo]) {
         previewImage.image = image
         addTextFieldsToImage(textEdits: textEdits)
@@ -169,5 +166,4 @@ extension CaptureImageViewController: DrawOverImageDelegate {
             previewImage.addSubview(textfield)
         }
     }
-
 }

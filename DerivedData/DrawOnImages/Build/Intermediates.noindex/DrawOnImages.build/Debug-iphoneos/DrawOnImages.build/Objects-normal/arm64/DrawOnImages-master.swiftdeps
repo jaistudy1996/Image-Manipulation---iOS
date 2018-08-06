@@ -1,10 +1,10 @@
 version: "Apple Swift version 4.1.2 (swiftlang-902.0.54 clang-902.0.39.2)"
 options: "fec6e6adeaa6ef89fd7a39033b4dec93"
-build_time: [1533315301, 533332000]
+build_time: [1533584134, 563497000]
 inputs:
   "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/AppDelegate.swift": [1520279180, 0]
   "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/CameraUI/CaptureImageViewController.swift": [1533313042, 0]
   "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/StoryboardInitializable.swift": [1521212340, 0]
   "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/TextFieldInfo.swift": [1521578924, 0]
   "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/DrawOverImage.swift": [1533314860, 0]
-  "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/CameraUI/TakePictures.swift": [1533315300, 0]
+  "/Users/jayantarora/Desktop/iOS practice applications/DrawOnImages/DrawOnImages/CameraUI/TakePictures.swift": [1533584133, 0]

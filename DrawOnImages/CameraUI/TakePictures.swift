@@ -16,7 +16,7 @@ class TakePicturePageViewController: UIPageViewController {
     var pageControl = UIPageControl()
 
     // MARK: Private properties
-    private(set) lazy var orderedViewControllers: [UIViewController] = {
+    private var orderedViewControllers: [UIViewController] = {
         return [CaptureImageViewController.fromStoryboard()]
     }()
 
@@ -73,10 +73,9 @@ class TakePicturePageViewController: UIPageViewController {
     @IBAction func addNewPicture(_ sender: UIBarButtonItem) {
         // open camera to take a new picture
         // must be a new controller otherwise the first view will not be used
-        guard (orderedViewControllers[currentPage] as? CaptureImageViewController)?.previewImage.image != nil else {
-            (orderedViewControllers.first as? CaptureImageViewController)?.openCamera(UIButton()) // just to invoke the method
-            return
-        }
+        guard let captureController =  orderedViewControllers[currentPage] as? CaptureImageViewController,
+            captureController.previewImage.image != nil
+        else { return }
         openCamera()
     }
 
@@ -189,9 +188,7 @@ extension TakePicturePageViewController: UIPageViewControllerDelegate {
 
 }
 
-extension TakePicturePageViewController: UINavigationControllerDelegate {
-    // for imagepickerveiewdelegate only
-}
+extension TakePicturePageViewController: UINavigationControllerDelegate {}
 
 extension TakePicturePageViewController: UIImagePickerControllerDelegate {
 

@@ -36,7 +36,6 @@ class CaptureImageViewController: UIViewController {
         if UIImagePickerController.isSourceTypeAvailable(.camera) {
             imagePickerController.sourceType = .camera
             imagePickerController.delegate = self
-
             present(imagePickerController, animated: true, completion: nil)
         } else {
             showNoCameraAvailableAlert()
@@ -48,7 +47,7 @@ class CaptureImageViewController: UIViewController {
 
     func editImage() {
         let drawOverImageVC = DrawOverImage.fromStoryboard()
-        drawOverImageVC.delgate = self as DrawOverImageDelegate
+        drawOverImageVC.delgate = self
         drawOverImageVC.imageForMainImage = previewImage.image
         drawOverImageVC.textFieldsInfo = textEdits
         present(UINavigationController(rootViewController: drawOverImageVC), animated: true, completion: nil)
@@ -73,8 +72,8 @@ class CaptureImageViewController: UIViewController {
     }
 
     func saveImage() {
-        if previewImage.image != nil {
-            UIImageWriteToSavedPhotosAlbum(previewImage.image!, self,
+        if let prevImage = previewImage.image {
+            UIImageWriteToSavedPhotosAlbum(prevImage, self,
                                            #selector(alertImageSaved(_:didFinishSavingWithError:contextInfo:)), nil)
         } else {
             return
@@ -131,10 +130,6 @@ extension CaptureImageViewController: UIImagePickerControllerDelegate {
             parent.editButton.isEnabled = true
             parent.saveButton.isEnabled = true
         }
-    }
-
-    @objc func reopenCamera() {
-        openCamera(UIButton(type: .system))
     }
 
     private func showNoCameraAvailableAlert() {

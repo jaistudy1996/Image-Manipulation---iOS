@@ -20,14 +20,14 @@ class DrawOverImage: UIViewController {
     var currentTextField: UITextField?
 
     // set this variable when instantiating this vc from some other vc
-    lazy var strokeColor: UIColor = UIColor.black
-    lazy var textColor: UIColor = UIColor.black
-    lazy var iPhoneColorSliderView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
+    private lazy var strokeColor: UIColor = UIColor.black
+    private lazy var textColor: UIColor = UIColor.black
+    private lazy var iPhoneColorSliderView: UIView = UIView(frame: CGRect(x: 0, y: 0, width: 0, height: 0))
     weak var imageForMainImage: UIImage!
-    weak var toolBar: UIToolbar!
+    private weak var toolBar: UIToolbar!
     weak var delgate: DrawOverImageDelegate?
-    var textFieldsInfo = [TextFieldInfo]()
-    var oldTouchPoint: CGPoint? // the last time when the screen was touch
+    var textFieldsInfo: [TextFieldInfo] = []
+    private var oldTouchPoint: CGPoint? // the last time when the screen was touch
 
     // MARK: Outlets
 
@@ -53,13 +53,13 @@ class DrawOverImage: UIViewController {
         dismiss(animated: true, completion: nil)
     }
 
-    // MARK: Public Methods
+    // MARK: View lifecycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpImage()
         toolBar = navigationController?.toolbar
         navigationController?.setToolbarHidden(false, animated: true)
+        setUpImage()
         startObservingNotifications()
     }
 

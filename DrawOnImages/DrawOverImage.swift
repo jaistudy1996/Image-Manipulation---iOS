@@ -19,6 +19,7 @@ class DrawOverImage: UIViewController {
     // current editing text field
     var currentTextField: UITextField?
 
+
     // set this variable when instantiating this vc from some other vc
     private lazy var strokeColor: UIColor = UIColor.black
     private lazy var textColor: UIColor = UIColor.black
